@@ -6,6 +6,7 @@ import * as path from 'path';
 
 // Note: Ensure you have a .env file and include LuisAppId, LuisAPIKey and LuisAPIHostName.
 const ENV_FILE = path.join(__dirname, '..', '.env');
+console.log(ENV_FILE);
 config({ path: ENV_FILE });
 
 import * as restify from 'restify';
@@ -20,11 +21,11 @@ import { DialogAndWelcomeBot } from './bots/dialogAndWelcomeBot';
 import { MainDialog } from './dialogs/mainDialog';
 
 // The bot's booking dialog
-import { BookingDialog } from './dialogs/bookingDialog';
-const BOOKING_DIALOG = 'bookingDialog';
+import { AddItemDialog } from './dialogs/addItemDialog';
+const ADD_ITEM_DIALOG = 'addItemDialog';
 
 // The helper-class recognizer that calls LUIS
-import { FlightBookingRecognizer } from './dialogs/flightBookingRecognizer';
+import { AddItemRecognizer } from './dialogs/addItemRecognizer';
 
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about adapters.
@@ -38,12 +39,12 @@ const onTurnErrorHandler = async (context, error) => {
     // This check writes out errors to console log .vs. app insights.
     // NOTE: In production environment, you should consider logging this to Azure
     //       application insights.
-    console.error(`\n [onTurnError] unhandled error: ${ error }`);
+    console.error(`\n [onTurnError] unhandled error: ${error}`);
 
     // Send a trace activity, which will be displayed in Bot Framework Emulator
     await context.sendTraceActivity(
         'OnTurnError Trace',
-        `${ error }`,
+        `${error}`,
         'https://www.botframework.com/schemas/error',
         'TurnError'
     );
@@ -73,19 +74,21 @@ userState = new UserState(memoryStorage);
 // If configured, pass in the FlightBookingRecognizer. (Defining it externally allows it to be mocked for tests)
 let luisRecognizer;
 const { LuisAppId, LuisAPIKey, LuisAPIHostName } = process.env;
-const luisConfig: LuisApplication = { applicationId: LuisAppId, endpointKey: LuisAPIKey, endpoint: `https://${ LuisAPIHostName }` };
+console.log(LuisAppId == undefined);
+const luisConfig: LuisApplication = { applicationId: LuisAppId, endpointKey: LuisAPIKey, endpoint: `https://${LuisAPIHostName}` };
 
-luisRecognizer = new FlightBookingRecognizer(luisConfig);
+luisRecognizer = new AddItemRecognizer(luisConfig);
 
 // Create the main dialog.
-const bookingDialog = new BookingDialog(BOOKING_DIALOG);
-const dialog = new MainDialog(luisRecognizer, bookingDialog);
+const addItemDialog = new AddItemDialog(ADD_ITEM_DIALOG);
+const dialog = new MainDialog(luisRecognizer, addItemDialog);
 const bot = new DialogAndWelcomeBot(conversationState, userState, dialog);
 
 // Create HTTP server
 const server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, () => {
-    console.log(`\n${ server.name } listening to ${ server.url }`);
+    console.log('Hello ' + LuisAPIKey);
+    console.log(`\n${server.name} listening to ${server.url}`);
     console.log('\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator');
     console.log('\nTo talk to your bot, open the emulator select "Open Bot"');
 });
