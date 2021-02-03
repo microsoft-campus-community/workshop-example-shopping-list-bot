@@ -74,7 +74,6 @@ userState = new UserState(memoryStorage);
 // If configured, pass in the FlightBookingRecognizer. (Defining it externally allows it to be mocked for tests)
 let luisRecognizer;
 const { LuisAppId, LuisAPIKey, LuisAPIHostName } = process.env;
-console.log(LuisAppId == undefined);
 const luisConfig: LuisApplication = { applicationId: LuisAppId, endpointKey: LuisAPIKey, endpoint: `https://${LuisAPIHostName}` };
 
 luisRecognizer = new AddItemRecognizer(luisConfig);
@@ -87,7 +86,6 @@ const bot = new DialogAndWelcomeBot(conversationState, userState, dialog);
 // Create HTTP server
 const server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, () => {
-    console.log('Hello ' + LuisAPIKey);
     console.log(`\n${server.name} listening to ${server.url}`);
     console.log('\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator');
     console.log('\nTo talk to your bot, open the emulator select "Open Bot"');

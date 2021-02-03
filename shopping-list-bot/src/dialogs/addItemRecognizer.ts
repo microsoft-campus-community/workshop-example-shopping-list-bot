@@ -40,12 +40,13 @@ export class AddItemRecognizer {
     }
 
     public getUnitEntities(result: RecognizerResult): Unit {
-        let unit = new Unit();
+        let unit;
         if (result.entities.$instance.number) {
+            unit = new Unit();
             unit.value = result.entities.$instance.number[0].text;
-        }
-        if (result.entities.UnitName) {
-            unit.unitName = result.entities.UnitName[0][0].text;
+            if (result.entities.UnitName) {
+                unit.unitName = result.entities.UnitName[0][0];
+            }
         }
         return unit;
     }

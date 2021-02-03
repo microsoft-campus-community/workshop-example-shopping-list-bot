@@ -42,8 +42,9 @@ export class AddItemDialog extends CancelAndHelpDialog {
         const entity = stepContext.result as string;
         const item = stepContext.options as Item;
         item.itemName = entity;
-
+        console.dir(item);
         if (!item.unit) {
+            console.log("line 47");
             return await stepContext.beginDialog(UNIT_DIALOG);
         } else {
             return await stepContext.next((item.unit));

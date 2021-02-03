@@ -95,7 +95,7 @@ export class MainDialog extends ComponentDialog {
         // Call LUIS and gather any potential booking details. (Note the TurnContext has the response to the prompt)
         const luisResult = await this.luisRecognizer.executeLuisQuery(stepContext.context);
         switch (LuisRecognizer.topIntent(luisResult)) {
-            case 'ShoppingList.AddItem':
+            case 'AddItem':
                 const itemName = this.luisRecognizer.getItemNameEntities(luisResult);
                 const unit = this.luisRecognizer.getUnitEntities(luisResult);
                 item.itemName = itemName;
