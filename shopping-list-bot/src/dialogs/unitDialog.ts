@@ -50,7 +50,7 @@ export class UnitDialog extends CancelAndHelpDialog {
 
     private async queryUnitValue(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const unit = stepContext.result as string;
-        (stepContext.options as Unit).name = unit;
+        (stepContext.options as Unit).unitName = unit;
         const messageText = `How many ${unit} (e.g. 500)?`;
         const message = MessageFactory.text(messageText, messageText, InputHints.ExpectingInput);
         return await stepContext.prompt(NUMBER_PROMPT, { prompt: message });

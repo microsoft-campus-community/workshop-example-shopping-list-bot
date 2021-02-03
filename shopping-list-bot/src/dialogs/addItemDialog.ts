@@ -18,7 +18,7 @@ export class AddItemDialog extends CancelAndHelpDialog {
             .addDialog(new ConfirmPrompt(CONFIRM_PROMPT))
             .addDialog(new UnitDialog(UNIT_DIALOG))
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
-                this.entityStep.bind(this),
+                this.itemNameStep.bind(this),
                 this.queryUnitStep.bind(this),
                 this.finalStep.bind(this)
             ]));
@@ -26,22 +26,22 @@ export class AddItemDialog extends CancelAndHelpDialog {
         this.initialDialogId = WATERFALL_DIALOG;
     }
 
-    private async entityStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+    private async itemNameStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const item = stepContext.options as Item;
 
-        if (!item.entity) {
+        if (!item.itemName) {
             const messageText = 'Which item would you like to add?';
             const message = MessageFactory.text(messageText, messageText, InputHints.ExpectingInput);
             return await stepContext.prompt(TEXT_PROMPT, { prompt: message });
         } else {
-            return await stepContext.next(item.entity);
+            return await stepContext.next(item.itemName);
         }
     }
 
     private async queryUnitStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const entity = stepContext.result as string;
         const item = stepContext.options as Item;
-        item.entity = entity;
+        item.itemName = entity;
 
         if (!item.unit) {
             return await stepContext.beginDialog(UNIT_DIALOG);
