@@ -6,7 +6,6 @@ import * as path from 'path';
 
 // Note: Ensure you have a .env file and include LuisAppId, LuisAPIKey and LuisAPIHostName.
 const ENV_FILE = path.join(__dirname, '..', '.env');
-console.log(ENV_FILE);
 config({ path: ENV_FILE });
 
 import * as restify from 'restify';
@@ -23,9 +22,11 @@ import { MainDialog } from './dialogs/mainDialog';
 // The bot's booking dialog
 import { AddItemDialog } from './dialogs/addItemDialog';
 const ADD_ITEM_DIALOG = 'addItemDialog';
+const GET_ALL_ITEMS_DIALOG = 'getAllItemsDialog';
 
 // The helper-class recognizer that calls LUIS
-import { AddItemRecognizer } from './dialogs/addItemRecognizer';
+import { ShoppingListRecognizer } from './dialogs/addItemRecognizer';
+import { GetAllItemsDialog } from './dialogs/getAllItemsDialog';
 
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about adapters.
@@ -76,11 +77,12 @@ let luisRecognizer;
 const { LuisAppId, LuisAPIKey, LuisAPIHostName } = process.env;
 const luisConfig: LuisApplication = { applicationId: LuisAppId, endpointKey: LuisAPIKey, endpoint: `https://${LuisAPIHostName}` };
 
-luisRecognizer = new AddItemRecognizer(luisConfig);
+luisRecognizer = new ShoppingListRecognizer(luisConfig);
 
 // Create the main dialog.
 const addItemDialog = new AddItemDialog(ADD_ITEM_DIALOG);
-const dialog = new MainDialog(luisRecognizer, addItemDialog);
+const getAllItemsDialog = new GetAllItemsDialog(GET_ALL_ITEMS_DIALOG);
+const dialog = new MainDialog(luisRecognizer, addItemDialog, getAllItemsDialog);
 const bot = new DialogAndWelcomeBot(conversationState, userState, dialog);
 
 // Create HTTP server

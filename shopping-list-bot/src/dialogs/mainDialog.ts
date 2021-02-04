@@ -19,14 +19,15 @@ import {
     WaterfallStepContext
 } from 'botbuilder-dialogs';
 import { AddItemDialog } from './addItemDialog';
-import { AddItemRecognizer } from './addItemRecognizer';
+import { ShoppingListRecognizer } from './addItemRecognizer';
+import { GetAllItemsDialog } from './getAllItemsDialog';
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
 
 export class MainDialog extends ComponentDialog {
-    private luisRecognizer: AddItemRecognizer;
+    private luisRecognizer: ShoppingListRecognizer;
 
-    constructor(luisRecognizer: AddItemRecognizer, addItemDialog: AddItemDialog) {
+    constructor(luisRecognizer: ShoppingListRecognizer, addItemDialog: AddItemDialog, getAllItemsDialog: GetAllItemsDialog) {
         super('MainDialog');
 
         if (!luisRecognizer) throw new Error('[MainDialog]: Missing parameter \'luisRecognizer\' is required');
@@ -34,10 +35,14 @@ export class MainDialog extends ComponentDialog {
 
         if (!addItemDialog) throw new Error('[MainDialog]: Missing parameter \'addItemDialog\' is required');
 
+        if (!getAllItemsDialog) throw new Error('[MainDialog]: Missing parameter \'getAllItemsDialog\' is required');
+
+
         // Define the main dialog and its related components.
         // This is a sample "book a flight" dialog.
         this.addDialog(new TextPrompt('TextPrompt'))
             .addDialog(addItemDialog)
+            .addDialog(getAllItemsDialog)
             .addDialog(new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
                 this.introStep.bind(this),
                 this.actStep.bind(this),
@@ -94,20 +99,28 @@ export class MainDialog extends ComponentDialog {
 
         // Call LUIS and gather any potential booking details. (Note the TurnContext has the response to the prompt)
         const luisResult = await this.luisRecognizer.executeLuisQuery(stepContext.context);
+        console.dir(luisResult);
+        console.log("before switch")
         switch (LuisRecognizer.topIntent(luisResult)) {
             case 'AddItem':
+                console.log("add item dialog");
                 const itemName = this.luisRecognizer.getItemNameEntities(luisResult);
                 const unit = this.luisRecognizer.getUnitEntities(luisResult);
                 item.itemName = itemName;
                 item.unit = unit;
 
                 return await stepContext.beginDialog('addItemDialog', item);
+
+            case 'GetAll':
+                console.log("get all");
+                return await stepContext.beginDialog('getAllItemsDialog');
+                break;
             default:
                 // Catch all for unhandled intents
                 const didntUnderstandMessageText = `Sorry, I didn't get that. Please try asking in a different way (intent was ${LuisRecognizer.topIntent(luisResult)})`;
                 await stepContext.context.sendActivity(didntUnderstandMessageText, didntUnderstandMessageText, InputHints.IgnoringInput);
         }
-
+        console.log("after switch")
         return await stepContext.next();
     }
 
@@ -116,6 +129,7 @@ export class MainDialog extends ComponentDialog {
      */
     private async finalStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         // If the child dialog ("addItemDialog") was cancelled or the user failed to confirm, the result here will be null.
+        console.log("final step");
         if (stepContext.result) {
             const result = stepContext.result as Item;
             // TODO This is where calls to the Azure Functions or Shopping ListGraph API would go
@@ -129,6 +143,7 @@ export class MainDialog extends ComponentDialog {
             }
             await stepContext.context.sendActivity(message);
         }
+        console.dir(this.initialDialogId);
 
         // Restart the main dialog waterfall with a different message the second time around
         return await stepContext.replaceDialog(this.initialDialogId, { restartMsg: 'What else can I do for you?' });

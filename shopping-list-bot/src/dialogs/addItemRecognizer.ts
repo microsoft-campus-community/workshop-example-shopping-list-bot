@@ -3,7 +3,7 @@ import { RecognizerResult, TurnContext } from 'botbuilder';
 import { LuisApplication, LuisRecognizer, LuisRecognizerOptionsV3 } from 'botbuilder-ai';
 import { Unit } from '../models/unit';
 
-export class AddItemRecognizer {
+export class ShoppingListRecognizer {
     private recognizer: LuisRecognizer;
 
     constructor(config: LuisApplication) {
