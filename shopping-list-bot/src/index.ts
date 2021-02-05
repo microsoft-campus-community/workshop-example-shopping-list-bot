@@ -23,10 +23,16 @@ import { MainDialog } from './dialogs/mainDialog';
 import { AddItemDialog } from './dialogs/addItemDialog';
 const ADD_ITEM_DIALOG = 'addItemDialog';
 const GET_ALL_ITEMS_DIALOG = 'getAllItemsDialog';
+const MARK_ITEM_DIALOG = 'markItemDialog';
+const UNMARK_ITEM_DIALOG = 'unmarkItemDialog';
+const REMOVE_ALL_ITEMS_DIALOG = 'removeAllItemsDialog';
+const REMOVE_ITEM_DIALOG = 'removeItemDialog';
 
 // The helper-class recognizer that calls LUIS
 import { ShoppingListRecognizer } from './dialogs/addItemRecognizer';
 import { GetAllItemsDialog } from './dialogs/getAllItemsDialog';
+import { QueryItemNameOrPositionDialog } from './dialogs/queryItemNameOrPositionDialog';
+import { RemoveAllItemsDialog } from './dialogs/removeAllItemsDialog';
 
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about adapters.
@@ -82,7 +88,11 @@ luisRecognizer = new ShoppingListRecognizer(luisConfig);
 // Create the main dialog.
 const addItemDialog = new AddItemDialog(ADD_ITEM_DIALOG);
 const getAllItemsDialog = new GetAllItemsDialog(GET_ALL_ITEMS_DIALOG);
-const dialog = new MainDialog(luisRecognizer, addItemDialog, getAllItemsDialog);
+const markItemDialog = new QueryItemNameOrPositionDialog(MARK_ITEM_DIALOG, 'Which item do you want to mark?');
+const unmarkItemDialog = new QueryItemNameOrPositionDialog(UNMARK_ITEM_DIALOG, 'Which item do you want to mark as not done?');
+const removeItemDialog = new QueryItemNameOrPositionDialog(REMOVE_ITEM_DIALOG, 'Which item do you want to remove?');
+const removeAllItemsDialog = new RemoveAllItemsDialog(REMOVE_ALL_ITEMS_DIALOG);
+const dialog = new MainDialog(luisRecognizer, addItemDialog, getAllItemsDialog, markItemDialog, unmarkItemDialog, removeItemDialog, removeAllItemsDialog);
 const bot = new DialogAndWelcomeBot(conversationState, userState, dialog);
 
 // Create HTTP server

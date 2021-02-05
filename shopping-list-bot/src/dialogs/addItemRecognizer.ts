@@ -50,4 +50,26 @@ export class ShoppingListRecognizer {
         }
         return unit;
     }
+
+    public hasPositionEntity(result: RecognizerResult): boolean {
+        return this.hasOrdinal(result) || this.hasNumber(result);
+    }
+
+    private hasOrdinal(result: RecognizerResult): boolean{
+        return (result.entities.ordinal && result.entities.ordinal.length > 0);
+    }
+
+    private hasNumber(result: RecognizerResult): boolean{
+        return (result.entities.number && result.entities.number.length > 0);
+    }
+
+    public getPositionEntity(result: RecognizerResult): number{
+        if(this.hasOrdinal(result)) {
+            return result.entities.ordinal[0];
+        } else if(this.hasNumber(result)) {
+            return result.entities.number[0];
+        } else {
+            return NaN;
+        }
+    }
 }

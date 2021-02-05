@@ -5,7 +5,7 @@ import { TimexProperty } from '@microsoft/recognizers-text-data-types-timex-expr
 import { Item } from '../models/item';
 import { Unit } from '../models/unit';
 
-import { InputHints, MessageFactory, StatePropertyAccessor, TurnContext } from 'botbuilder';
+import { InputHints, MessageFactory, RecognizerResult, StatePropertyAccessor, TurnContext } from 'botbuilder';
 import { LuisRecognizer } from 'botbuilder-ai';
 
 import {
@@ -21,13 +21,15 @@ import {
 import { AddItemDialog } from './addItemDialog';
 import { ShoppingListRecognizer } from './addItemRecognizer';
 import { GetAllItemsDialog } from './getAllItemsDialog';
+import { QueryItemNameOrPositionDialog } from './queryItemNameOrPositionDialog';
+import { RemoveAllItemsDialog } from './removeAllItemsDialog';
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
 
 export class MainDialog extends ComponentDialog {
     private luisRecognizer: ShoppingListRecognizer;
 
-    constructor(luisRecognizer: ShoppingListRecognizer, addItemDialog: AddItemDialog, getAllItemsDialog: GetAllItemsDialog) {
+    constructor(luisRecognizer: ShoppingListRecognizer, addItemDialog: AddItemDialog, getAllItemsDialog: GetAllItemsDialog, markItemDialog: QueryItemNameOrPositionDialog, unmarkItemDialog: QueryItemNameOrPositionDialog, removeSingleItemDialog: QueryItemNameOrPositionDialog, removeAllItemsDialog: RemoveAllItemsDialog) {
         super('MainDialog');
 
         if (!luisRecognizer) throw new Error('[MainDialog]: Missing parameter \'luisRecognizer\' is required');
@@ -37,12 +39,24 @@ export class MainDialog extends ComponentDialog {
 
         if (!getAllItemsDialog) throw new Error('[MainDialog]: Missing parameter \'getAllItemsDialog\' is required');
 
+        if (!markItemDialog) throw new Error('[MainDialog]: Missing parameter \'markItemDialog\' is required');
+
+        if (!unmarkItemDialog) throw new Error('[MainDialog]: Missing parameter \'unmarkItemDialog\' is required');
+
+        if (!removeAllItemsDialog) throw new Error('[MainDialog]: Missing parameter \'removeAllItemsDialog\' is required');
+
+        if (!removeSingleItemDialog) throw new Error('[MainDialog]: Missing parameter \'removeSingleItemDialog\' is required');
+
 
         // Define the main dialog and its related components.
         // This is a sample "book a flight" dialog.
         this.addDialog(new TextPrompt('TextPrompt'))
             .addDialog(addItemDialog)
             .addDialog(getAllItemsDialog)
+            .addDialog(markItemDialog)
+            .addDialog(unmarkItemDialog)
+            .addDialog(removeAllItemsDialog)
+            .addDialog(removeSingleItemDialog)
             .addDialog(new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
                 this.introStep.bind(this),
                 this.actStep.bind(this),
@@ -108,13 +122,25 @@ export class MainDialog extends ComponentDialog {
                 const unit = this.luisRecognizer.getUnitEntities(luisResult);
                 item.itemName = itemName;
                 item.unit = unit;
-
                 return await stepContext.beginDialog('addItemDialog', item);
-
             case 'GetAll':
                 console.log("get all");
                 return await stepContext.beginDialog('getAllItemsDialog');
-                break;
+            case 'MarkItem':
+                console.log("mark item");
+                const itemToMark = this.getItemWithNameOrPosition(luisResult);
+                return await stepContext.beginDialog('markItemDialog', itemToMark);
+            case 'UnmarkItem':
+                console.log("unmark item");
+                const itemToUnmark = this.getItemWithNameOrPosition(luisResult);
+                return await stepContext.beginDialog('unmarkItemDialog', itemToUnmark);
+            case 'RemoveAll':
+                console.log('[DEBUG] remove all');
+                return await stepContext.beginDialog('removeAllItemsDialog');
+            case 'RemoveItem':
+                console.log('[DEBUG] remove item');
+                const itemToRemove = this.getItemWithNameOrPosition(luisResult);
+                return await stepContext.beginDialog('removeItemDialog', itemToRemove);
             default:
                 // Catch all for unhandled intents
                 const didntUnderstandMessageText = `Sorry, I didn't get that. Please try asking in a different way (intent was ${LuisRecognizer.topIntent(luisResult)})`;
@@ -122,6 +148,18 @@ export class MainDialog extends ComponentDialog {
         }
         console.log("after switch")
         return await stepContext.next();
+    }
+
+
+    private getItemWithNameOrPosition(luisResult: RecognizerResult) {
+        const item = new Item();
+        const itemName = this.luisRecognizer.getItemNameEntities(luisResult);
+        item.itemName = itemName;
+        if (this.luisRecognizer.hasPositionEntity(luisResult)) {
+            item.positionInShoppingList = this.luisRecognizer.getPositionEntity(luisResult);
+        }
+        console.dir(item);
+        return item;
     }
 
     /**

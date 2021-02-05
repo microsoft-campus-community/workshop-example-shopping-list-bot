@@ -31,7 +31,9 @@ export class GetAllItemsDialog extends CancelAndHelpDialog {
             unit: {
                 unitName: "kg",
                 value: 2
-            }
+            },
+            positionInShoppingList: 1,
+            marked: false
         });
        const shoppingListAdaptiveCardTemplate = new Template(ShoppingListCard);
        const currentShoppingListPayload = shoppingListAdaptiveCardTemplate.expand({
