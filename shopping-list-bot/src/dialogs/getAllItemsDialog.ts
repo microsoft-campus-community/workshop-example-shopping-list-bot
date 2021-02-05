@@ -1,6 +1,8 @@
 import { AdaptiveCard, TextBlock, Version } from "adaptivecards";
+import { Template } from "adaptivecards-templating";
 import { ActivityFactory, Attachment, AttachmentLayout, CardFactory, InputHints, MessageFactory } from "botbuilder";
 import { AttachmentPrompt, DialogTurnResult, DialogTurnStatus, WaterfallDialog, WaterfallStepContext } from "botbuilder-dialogs";
+import { Item } from "../models/item";
 import { CancelAndHelpDialog } from "./cancelAndHelpDialog";
 const ShoppingListCard = require('../../resources/shoppingListCard.json');
 
@@ -21,23 +23,31 @@ export class GetAllItemsDialog extends CancelAndHelpDialog {
     }
 
     private async showItemsStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        //TODO call to function
-        const messageText = 'Plain text is ok, but sometimes I long for more...';
-        const itemsAdaptiveCard = new AdaptiveCard();
-        itemsAdaptiveCard.version = new Version(1, 0);
-        
-        const textBlock = new TextBlock();
-        textBlock.text = "Hello World";
-        itemsAdaptiveCard.addItem(textBlock);
-        const itemsAdaptiveCardAttachment = CardFactory.adaptiveCard(itemsAdaptiveCard);
-        console.dir(itemsAdaptiveCard);
-        console.dir(itemsAdaptiveCardAttachment);
-        const card = CardFactory.adaptiveCard(ShoppingListCard);
-        
+        //TODO call to function to get shopping list items
+        const items = new Array<Item>();
+        items.push({
+            intent: "",
+            itemName: "Banana",
+            unit: {
+                unitName: "kg",
+                value: 2
+            }
+        });
+       const shoppingListAdaptiveCardTemplate = new Template(ShoppingListCard);
+       const currentShoppingListPayload = shoppingListAdaptiveCardTemplate.expand({
+            $root:{
+                title: "Shopping List",
+                items: items
+            }
+        });
+        const shoppingListAdaptiveCard = new AdaptiveCard();
+        shoppingListAdaptiveCard.parse(currentShoppingListPayload);
+        const itemsAdaptiveCardAttachment = CardFactory.adaptiveCard(shoppingListAdaptiveCard);
 
-       // const message = MessageFactory.attachment(itemsAdaptiveCardAttachment, messageText, messageText);
-        //  return await stepContext.prompt(ATTACHMENT_PROMPT, {prompt: message});
-        await stepContext.context.sendActivity({ text: messageText,attachments: [itemsAdaptiveCardAttachment]});
+
+
+
+         await stepContext.context.sendActivity({ attachments: [itemsAdaptiveCardAttachment]});
         return stepContext.endDialog();
     }
 }
