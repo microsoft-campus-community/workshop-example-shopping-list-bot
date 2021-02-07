@@ -8,6 +8,5 @@ export class Unit {
         }
         this.unitName = unitName;
         this.value = value;
-
     }
 }

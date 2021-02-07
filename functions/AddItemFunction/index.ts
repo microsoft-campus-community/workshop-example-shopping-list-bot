@@ -3,23 +3,36 @@ import { Item } from "../models/item";
 import { Unit } from "../models/unit";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest, getShoppingListDocument: ContextBindings): Promise<void> {
-    if (!context.bindingData.conversationID || !req.body.item || !req.body.item.itemName) {
+    if (!context.bindingData.conversationID || !req.body || !req.body.itemName) {
+        console.dir("[DEBUG] ITEM: " + req.body);
+        console.dir("[DEBUG] ID: " + context.bindingData.conversationID);
         context.res = {
-            status: 400
+            status: 400,
+            body: {
+                message: 'invalid input'
+            }
         };
         context.done();
     }
-
+    console.log(`[DEBUG] The item ${req.body.itemName} is to be added`);
     const positionInShoppingList = getShoppingListDocument[0].$1 + 1;
-    const item: Item = new Item(req.body.item.itemName, false, positionInShoppingList, new Unit(req.body.item.unit.unitName, req.body.item.unit.value));
-
-    context.bindings.addShoppingListDocument = JSON.stringify({
-        conversationID: context.bindingData.conversationID,
-        item: item
-    });
-    context.res = {
-        status: 201,
-    };
+    try {
+        const item: Item = new Item(req.body.itemName, false, positionInShoppingList, new Unit(req.body.unit.unitName, req.body.unit.value));
+        context.bindings.addShoppingListDocument = JSON.stringify({
+            conversationID: context.bindingData.conversationID,
+            item: item
+        });
+        context.res = {
+            status: 201,
+        };
+    } catch (error) {
+        context.res = {
+            status: 400,
+            body: {
+                message: error.message
+            }
+        };
+    }
     context.done();
 };
 

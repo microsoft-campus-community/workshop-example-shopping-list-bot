@@ -33,6 +33,7 @@ import { ShoppingListRecognizer } from './dialogs/addItemRecognizer';
 import { GetAllItemsDialog } from './dialogs/getAllItemsDialog';
 import { QueryItemNameOrPositionDialog } from './dialogs/queryItemNameOrPositionDialog';
 import { RemoveAllItemsDialog } from './dialogs/removeAllItemsDialog';
+import { FunctionService } from './services/functionsService';
 
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about adapters.
@@ -92,7 +93,7 @@ const markItemDialog = new QueryItemNameOrPositionDialog(MARK_ITEM_DIALOG, 'Whic
 const unmarkItemDialog = new QueryItemNameOrPositionDialog(UNMARK_ITEM_DIALOG, 'Which item do you want to mark as not done?');
 const removeItemDialog = new QueryItemNameOrPositionDialog(REMOVE_ITEM_DIALOG, 'Which item do you want to remove?');
 const removeAllItemsDialog = new RemoveAllItemsDialog(REMOVE_ALL_ITEMS_DIALOG);
-const dialog = new MainDialog(luisRecognizer, addItemDialog, getAllItemsDialog, markItemDialog, unmarkItemDialog, removeItemDialog, removeAllItemsDialog);
+const dialog = new MainDialog(luisRecognizer, addItemDialog, getAllItemsDialog, markItemDialog, unmarkItemDialog, removeItemDialog, removeAllItemsDialog, new FunctionService(process.env.FunctionsBaseURL));
 const bot = new DialogAndWelcomeBot(conversationState, userState, dialog);
 
 // Create HTTP server
