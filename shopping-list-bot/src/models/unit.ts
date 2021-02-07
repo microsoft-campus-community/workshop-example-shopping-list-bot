@@ -1,4 +1,4 @@
 export class Unit {
-    unitName: string;
+    unitName?: string;
     value: number;
 }
