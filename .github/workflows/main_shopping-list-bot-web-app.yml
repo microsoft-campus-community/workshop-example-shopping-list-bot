@@ -36,4 +36,4 @@ jobs:
         app-name: 'shopping-list-bot-web-app'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_bcee5b88aa5b4ee2aa4c3c4a525cbcfe }}
-        package: .
+        package: ./shopping-list-bot/lib
