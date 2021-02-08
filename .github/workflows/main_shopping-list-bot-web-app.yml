@@ -11,12 +11,14 @@ on:
       - 'shopping-list-bot/**'
   workflow_dispatch:
 
+env:  
+  AZURE_WEBAPP_NAME: shopping-list-bot-web-app # set this to your application's name  
+  AZURE_WEBAPP_PACKAGE_PATH: 'shopping-list-bot' # set this to the path to your web app project, defaults to the repository root  
+  NODE_VERSION: '14.x' # set this to the node version to use
+
 jobs:
   build-and-deploy:
     runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: ./shopping-list-bot
 
     steps:
     - uses: actions/checkout@master
@@ -24,18 +26,19 @@ jobs:
     - name: Set up Node.js version
       uses: actions/setup-node@v1
       with:
-        node-version: '14.x'
+        node-version: ${{ env.NODE_VERSION }}
 
     - name: npm install, build, and test
       run: |
         npm install
         npm run build --if-present
         npm run test --if-present
+      working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'shopping-list-bot-web-app'
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_bcee5b88aa5b4ee2aa4c3c4a525cbcfe }}
-        package: ./shopping-list-bot/lib
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
