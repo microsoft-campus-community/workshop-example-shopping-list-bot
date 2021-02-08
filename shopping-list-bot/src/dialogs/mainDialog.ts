@@ -23,13 +23,15 @@ import { ShoppingListRecognizer } from './addItemRecognizer';
 import { GetAllItemsDialog } from './getAllItemsDialog';
 import { QueryItemNameOrPositionDialog } from './queryItemNameOrPositionDialog';
 import { RemoveAllItemsDialog } from './removeAllItemsDialog';
+import { FunctionService } from '../services/functionsService';
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
 
 export class MainDialog extends ComponentDialog {
     private luisRecognizer: ShoppingListRecognizer;
+    private shoppingListFunctionService: FunctionService;
 
-    constructor(luisRecognizer: ShoppingListRecognizer, addItemDialog: AddItemDialog, getAllItemsDialog: GetAllItemsDialog, markItemDialog: QueryItemNameOrPositionDialog, unmarkItemDialog: QueryItemNameOrPositionDialog, removeSingleItemDialog: QueryItemNameOrPositionDialog, removeAllItemsDialog: RemoveAllItemsDialog) {
+    constructor(luisRecognizer: ShoppingListRecognizer, addItemDialog: AddItemDialog, getAllItemsDialog: GetAllItemsDialog, markItemDialog: QueryItemNameOrPositionDialog, unmarkItemDialog: QueryItemNameOrPositionDialog, removeSingleItemDialog: QueryItemNameOrPositionDialog, removeAllItemsDialog: RemoveAllItemsDialog, shoppingListFunctionService: FunctionService) {
         super('MainDialog');
 
         if (!luisRecognizer) throw new Error('[MainDialog]: Missing parameter \'luisRecognizer\' is required');
@@ -47,6 +49,8 @@ export class MainDialog extends ComponentDialog {
 
         if (!removeSingleItemDialog) throw new Error('[MainDialog]: Missing parameter \'removeSingleItemDialog\' is required');
 
+        if (!shoppingListFunctionService) throw new Error('[MainDialog]: Missing parameter \'shoppingListFunctionService\' is required');
+        this.shoppingListFunctionService = shoppingListFunctionService;
 
         // Define the main dialog and its related components.
         // This is a sample "book a flight" dialog.
@@ -74,7 +78,6 @@ export class MainDialog extends ComponentDialog {
     public async run(context: TurnContext, accessor: StatePropertyAccessor<DialogState>) {
         const dialogSet = new DialogSet(accessor);
         dialogSet.add(this);
-
         const dialogContext = await dialogSet.createContext(context);
         const results = await dialogContext.continueDialog();
         if (results.status === DialogTurnStatus.empty) {
@@ -114,7 +117,7 @@ export class MainDialog extends ComponentDialog {
         // Call LUIS and gather any potential booking details. (Note the TurnContext has the response to the prompt)
         const luisResult = await this.luisRecognizer.executeLuisQuery(stepContext.context);
         console.dir(luisResult);
-        console.log("before switch")
+        console.log("before switch");
         switch (LuisRecognizer.topIntent(luisResult)) {
             case 'AddItem':
                 console.log("add item dialog");
@@ -123,6 +126,24 @@ export class MainDialog extends ComponentDialog {
                 item.itemName = itemName;
                 item.unit = unit;
                 return await stepContext.beginDialog('addItemDialog', item);
+            // const itemToAddResult = await stepContext.beginDialog('addItemDialog', item);
+            // const itemToAdd = itemToAddResult.result as Item;
+            // console.dir(itemToAddResult);
+            // console.dir(itemToAdd);
+            // if (itemToAdd) {
+            //     const addedResult = await this.shoppingListFunctionService.addItem(stepContext.context.activity.conversation.id, itemToAdd);
+            //     if (!addedResult.ok) {
+            //         //TODO more specific error to tell the user what was wrong.
+            //         const couldNotAddMessage = `Sorry, I could not add ${itemToAdd.itemName}`;
+            //         await stepContext.context.sendActivity(couldNotAddMessage, couldNotAddMessage, InputHints.IgnoringInput);
+            //     } else {
+            //         const addedSuccessMessage = `I added ${itemToAdd.itemName} to your shopping list`;
+            //         await stepContext.context.sendActivity(addedSuccessMessage, addedSuccessMessage, InputHints.IgnoringInput);
+            //     }
+
+            // }
+            // console.log("end switch add item dialog");
+            // break;
             case 'GetAll':
                 console.log("get all");
                 return await stepContext.beginDialog('getAllItemsDialog');
@@ -143,10 +164,10 @@ export class MainDialog extends ComponentDialog {
                 return await stepContext.beginDialog('removeItemDialog', itemToRemove);
             default:
                 // Catch all for unhandled intents
-                const didntUnderstandMessageText = `Sorry, I didn't get that. Please try asking in a different way (intent was ${LuisRecognizer.topIntent(luisResult)})`;
+                const didntUnderstandMessageText = `Sorry, I didn't get that. Please try asking in a different way (intent was ${LuisRecognizer.topIntent(luisResult)})`;;
                 await stepContext.context.sendActivity(didntUnderstandMessageText, didntUnderstandMessageText, InputHints.IgnoringInput);
         }
-        console.log("after switch")
+        console.log("after switch");
         return await stepContext.next();
     }
 
@@ -173,16 +194,25 @@ export class MainDialog extends ComponentDialog {
             // TODO This is where calls to the Azure Functions or Shopping ListGraph API would go
 
             // If the call to Azure function or Shopping List Graph API is successfull, tell the user.
-            let message: string;
-            if (result.unit) {
-                message = `I have added ${result.unit.value} ${result.unit.unitName} ${result.itemName} to your shopping list.`;
-            } else {
-                message = `I have added ${result.itemName} to your shopping list.`;
-            }
-            await stepContext.context.sendActivity(message);
-        }
-        console.dir(this.initialDialogId);
 
+            const addedResult = await this.shoppingListFunctionService.addItem(stepContext.context.activity.conversation.id, result);
+            console.dir(addedResult.statusText);
+            if (!addedResult.ok) {
+                //TODO more specific error to tell the user what was wrong.
+                const couldNotAddMessage = `Sorry, I could not add ${result.itemName}`;
+                await stepContext.context.sendActivity(couldNotAddMessage, couldNotAddMessage, InputHints.IgnoringInput);
+            } else {
+                const addedSuccessMessage = `I added ${result.itemName} to your shopping list`;
+                await stepContext.context.sendActivity(addedSuccessMessage, addedSuccessMessage, InputHints.IgnoringInput);
+            }
+            // let message: string;
+            // if (result.unit) {
+            //     message = `I have added ${result.unit.value} ${result.unit.unitName} ${result.itemName} to your shopping list.`;
+            // } else {
+            //     message = `I have added ${result.itemName} to your shopping list.`;
+            // }
+            // await stepContext.context.sendActivity(message);
+        }
         // Restart the main dialog waterfall with a different message the second time around
         return await stepContext.replaceDialog(this.initialDialogId, { restartMsg: 'What else can I do for you?' });
     }
