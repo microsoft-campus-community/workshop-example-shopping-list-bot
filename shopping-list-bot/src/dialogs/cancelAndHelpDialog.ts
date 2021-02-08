@@ -21,7 +21,7 @@ export class CancelAndHelpDialog extends ComponentDialog {
         return await super.onContinueDialog(innerDc);
     }
 
-    private async interrupt(innerDc: DialogContext): Promise<DialogTurnResult|undefined> {
+    private async interrupt(innerDc: DialogContext): Promise<DialogTurnResult | undefined> {
         if (innerDc.context.activity.text) {
             const text = innerDc.context.activity.text.toLowerCase();
 

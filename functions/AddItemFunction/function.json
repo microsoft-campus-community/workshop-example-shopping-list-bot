@@ -1,0 +1,38 @@
+{
+    "bindings": [
+        {
+            "authLevel": "anonymous",
+            "type": "httpTrigger",
+            "direction": "in",
+            "name": "req",
+            "methods": [
+                "post"
+            ],
+            "route": "AddItemFunction/{conversationID}"
+        },
+        {
+            "type": "http",
+            "direction": "out",
+            "name": "res"
+        },
+        {
+            "name": "addShoppingListDocument",
+            "type": "cosmosDB",
+            "databaseName": "shopping-list-db",
+            "collectionName": "ShoppingListContainer",
+            "createIfNotExists": true,
+            "connectionStringSetting": "shopping-list-cosmosDB",
+            "direction": "out"
+        },
+        {
+            "type": "cosmosDB",
+            "name": "getShoppingListDocument",
+            "databaseName": "shopping-list-db",
+            "collectionName": "ShoppingListContainer",
+            "connectionStringSetting": "shopping-list-cosmosDB",
+            "direction": "in",
+            "sqlQuery": "SELECT COUNT(c.conversationID) FROM c WHERE c.conversationID = {conversationID}"
+        }
+    ],
+    "scriptFile": "../dist/AddItemFunction/index.js"
+}
