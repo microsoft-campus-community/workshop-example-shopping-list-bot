@@ -12,6 +12,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./shopping-list-bot
 
     steps:
     - uses: actions/checkout@master
