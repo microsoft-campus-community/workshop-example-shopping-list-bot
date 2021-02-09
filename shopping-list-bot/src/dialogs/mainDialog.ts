@@ -147,8 +147,8 @@ export class MainDialog extends ComponentDialog {
             case 'GetAll':
                 console.log("get all");
                 const itemsResponse = await this.shoppingListFunctionService.getItemsInShoppingList(stepContext.context.activity.conversation.id);
-               
-                if(!itemsResponse.ok) {
+
+                if (!itemsResponse.ok) {
                     const couldNotGetItems = 'Sorry, I can not get all items in your shopping list currently. Please try again later.';
                     await stepContext.context.sendActivity(couldNotGetItems, couldNotGetItems, InputHints.IgnoringInput);
                     break;
@@ -169,6 +169,12 @@ export class MainDialog extends ComponentDialog {
             case 'RemoveItem':
                 console.log('[DEBUG] remove item');
                 const itemToRemove = this.getItemWithNameOrPosition(luisResult);
+                const removedItem = await this.shoppingListFunctionService.removeItemByPosition(stepContext.context.activity.conversation.id, itemToRemove.positionInShoppingList);
+                if (!removedItem.ok) {
+                    const couldNotRemoveItem = 'Sorry, I currently cannot remove this item. Please try again later.';
+                    await stepContext.context.sendActivity(couldNotRemoveItem, couldNotRemoveItem, InputHints.IgnoringInput);
+                    break;
+                }
                 return await stepContext.beginDialog('removeItemDialog', itemToRemove);
             default:
                 // Catch all for unhandled intents

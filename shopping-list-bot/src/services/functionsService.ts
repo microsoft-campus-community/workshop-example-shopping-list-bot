@@ -20,4 +20,11 @@ export class FunctionService {
     public getItemsInShoppingList(conversationId: string): Promise<Response> {
         return fetch(`${this.baseUrl}/GetItemsFunction/${conversationId}`);
     }
+
+    public removeItemByPosition(conversationId: string, position: number): Promise<Response> {
+        return fetch(`${this.baseUrl}/RemoveItemByPositionFunction/${conversationId}/${position}`,
+            {
+                method: 'delete',
+            });
+    }
 }
