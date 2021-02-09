@@ -9,9 +9,14 @@
     "start": "func start",
     "test": "echo \"No tests yet...\""
   },
-  "dependencies": {},
+  "dependencies": {
+    "@azure/cosmos": "^3.9.5",
+    "dotenv": "^8.2.0",
+    "path": "^0.12.7"
+  },
   "devDependencies": {
     "@azure/functions": "^1.0.2-beta2",
+    "@types/node": "^14.14.25",
     "typescript": "^3.3.3"
   }
 }
