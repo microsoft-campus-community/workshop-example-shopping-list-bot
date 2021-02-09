@@ -16,4 +16,8 @@ export class FunctionService {
             });
 
     }
+
+    public getItemsInShoppingList(conversationId: string): Promise<Response> {
+        return fetch(`${this.baseUrl}/GetItemsFunction/${conversationId}`);
+    }
 }

@@ -146,7 +146,15 @@ export class MainDialog extends ComponentDialog {
             // break;
             case 'GetAll':
                 console.log("get all");
-                return await stepContext.beginDialog('getAllItemsDialog');
+                const itemsResponse = await this.shoppingListFunctionService.getItemsInShoppingList(stepContext.context.activity.conversation.id);
+               
+                if(!itemsResponse.ok) {
+                    const couldNotGetItems = 'Sorry, I can not get all items in your shopping list currently. Please try again later.';
+                    await stepContext.context.sendActivity(couldNotGetItems, couldNotGetItems, InputHints.IgnoringInput);
+                    break;
+                }
+                const items = await itemsResponse.json() as Item[];
+                return await stepContext.beginDialog('getAllItemsDialog', items);
             case 'MarkItem':
                 console.log("mark item");
                 const itemToMark = this.getItemWithNameOrPosition(luisResult);
