@@ -20,7 +20,7 @@
       "name": "getShoppingListDocument",
       "databaseName": "shopping-list-db",
       "collectionName": "ShoppingListContainer",
-      "connectionStringSetting": "shopping-list-cosmosDB",
+      "connectionStringSetting": "SHOPPING_LIST_COSMOSDB",
       "direction": "in",
       "sqlQuery": "SELECT c.item FROM c WHERE c.conversationID = {conversationID}"
   }
