@@ -6,4 +6,14 @@ export class Item {
     public itemName: string;
     public marked: boolean = false;
     public positionInShoppingList: number;
+
+    toString(): string {
+        
+            let unitText = '';
+            if (this.unit) {
+                unitText = this.unit.unitName ? `${this.unit.value} ${this.unit.unitName} `: this.unit.value.toString();
+            }
+            return `${unitText}${this.itemName}`;
+       
+    }
 }

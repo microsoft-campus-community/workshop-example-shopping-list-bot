@@ -9,7 +9,7 @@ export class DialogBot extends ActivityHandler {
     private conversationState: BotState;
     private userState: BotState;
     private dialog: Dialog;
-    private dialogState: StatePropertyAccessor<DialogState>;
+    protected dialogState: StatePropertyAccessor<DialogState>;
 
     /**
      *
@@ -36,7 +36,6 @@ export class DialogBot extends ActivityHandler {
 
         this.onMessage(async (context, next) => {
             console.log('Running dialog with Message Activity.');
-
             // Run the Dialog with the new message Activity.
             await (this.dialog as MainDialog).run(context, this.dialogState);
 

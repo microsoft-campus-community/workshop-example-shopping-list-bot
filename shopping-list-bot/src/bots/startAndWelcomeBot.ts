@@ -5,13 +5,14 @@ import { BotState, CardFactory } from 'botbuilder';
 import { Dialog, DialogState } from 'botbuilder-dialogs';
 import { MainDialog } from '../dialogs/mainDialog';
 import { DialogBot } from './dialogBot';
+import { FunctionService } from '../services/functionsService';
+import { UpdateMultipleItemsDialog } from '../dialogs/updateMultipleItemsDialog';
 
 const WelcomeCard = require('../../resources/welcomeCard.json');
 
-export class DialogAndWelcomeBot extends DialogBot {
+export class StartAndWelcomeBot extends DialogBot {
     constructor(conversationState: BotState, userState: BotState, dialog: Dialog) {
         super(conversationState, userState, dialog);
-
         this.onMembersAdded(async (context, next) => {
             const membersAdded = context.activity.membersAdded;
             for (const member of membersAdded) {
