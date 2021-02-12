@@ -1,6 +1,8 @@
-import { AzureFunction, Context, HttpRequest, ContextBindings } from "@azure/functions"
+import { AzureFunction, Context, HttpRequest, ContextBindings } from "@azure/functions";
+import { Item } from "../models/item";
+import { CosmosDBService } from "../services/cosmosDBService";
 
-const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest, getShoppingListDocument: ContextBindings): Promise<void> {
+const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     if (!context.bindingData.conversationID) {
         context.res = {
             status: 400,
@@ -10,11 +12,20 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         };
         context.done();
     }
-    const items = getShoppingListDocument.map(nestedItem => nestedItem.item);
-    context.res = {
-        status: 200,
-        body: items
-    };
+
+    try {
+        const cosmosService = new CosmosDBService(context.bindingData.conversationID);
+        const items: Item[] = await cosmosService.getAllItems();
+        context.res = {
+            status: 200,
+            body: items
+        };
+    } catch (error) {
+        context.res = {
+            status: 400,
+            body: { message: 'Error in retrieving items' }
+        };
+    }
     context.done();
 
 };

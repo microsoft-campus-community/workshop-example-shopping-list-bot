@@ -14,24 +14,6 @@
             "type": "http",
             "direction": "out",
             "name": "res"
-        },
-        {
-            "name": "addShoppingListDocument",
-            "type": "cosmosDB",
-            "databaseName": "shopping-list-db",
-            "collectionName": "ShoppingListContainer",
-            "createIfNotExists": true,
-            "connectionStringSetting": "SHOPPING_LIST_COSMOSDB",
-            "direction": "out"
-        },
-        {
-            "type": "cosmosDB",
-            "name": "getShoppingListDocument",
-            "databaseName": "shopping-list-db",
-            "collectionName": "ShoppingListContainer",
-            "connectionStringSetting": "SHOPPING_LIST_COSMOSDB",
-            "direction": "in",
-            "sqlQuery": "SELECT COUNT(c.conversationID) FROM c WHERE c.conversationID = {conversationID}"
         }
     ],
     "scriptFile": "../dist/AddItemFunction/index.js"

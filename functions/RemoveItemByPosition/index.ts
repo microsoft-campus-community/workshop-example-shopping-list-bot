@@ -1,8 +1,5 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
-import { Item } from "../models/item";
 import { CosmosDBService } from "../services/cosmosDBService";
-
-
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     const conversationID = context.bindingData.conversationID;
@@ -19,10 +16,10 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     try {
         const cosmosService = new CosmosDBService(conversationID);
-        const removedItem: Item = await cosmosService.removeItemByPosition(positionInShoppingList);
+        await cosmosService.removeItemByPosition(positionInShoppingList);
         context.res = {
             status: 200,
-            body: removedItem
+            body: { message: 'Deleted' }
         };
     } catch (error) {
         context.res = {
