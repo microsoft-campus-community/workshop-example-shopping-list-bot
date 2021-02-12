@@ -1,0 +1,20 @@
+{
+    "bindings": [
+        {
+            "authLevel": "anonymous",
+            "type": "httpTrigger",
+            "direction": "in",
+            "name": "req",
+            "methods": [
+                "delete"
+            ],
+            "route": "RemoveAllItems/{conversationID}"
+        },
+        {
+            "type": "http",
+            "direction": "out",
+            "name": "res"
+        }
+    ],
+    "scriptFile": "../dist/RemoveAllItemsFunction/index.js"
+}
