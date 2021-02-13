@@ -3,8 +3,8 @@ import { CosmosDBService } from "../services/cosmosDBService";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     const conversationID = context.bindingData.conversationID;
-    const positionInShoppingList = context.bindingData.positionInShoppingList;
-    if (!conversationID || !positionInShoppingList || positionInShoppingList <= 0) {
+    const itemID = context.bindingData.itemID;
+    if (!conversationID || !itemID || itemID === '') {
         context.res = {
             status: 400,
             body: {
@@ -16,7 +16,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     try {
         const cosmosService = new CosmosDBService(conversationID);
-        await cosmosService.removeItemByPosition(positionInShoppingList);
+        await cosmosService.removeItemByID(itemID);
         context.res = {
             status: 200,
             body: { message: 'Deleted' }

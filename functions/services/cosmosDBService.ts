@@ -1,16 +1,22 @@
 import { Item } from "../models/item";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 export class CosmosDBService {
 
     private readonly client: MongoClient;
     private readonly conversationID: string;
     constructor(conversationID: string) {
+        if (!conversationID || conversationID === '') {
+            throw new Error('Illegal value for conversationID');
+        }
         this.conversationID = conversationID;
         this.client = new MongoClient(process.env.SHOPPING_LIST_COSMOSDB, { useUnifiedTopology: true });
     }
 
     public async addItem(item: Item) {
+        if (!item || !item.itemName || item.itemName === '') {
+            throw new Error('Illegal value for item');
+        }
         try {
             const collection = await this.connectAndGetCollection();
             const positionInShoppingList: number = await collection.find({ conversationID: this.conversationID }).count() + 1;
@@ -32,20 +38,15 @@ export class CosmosDBService {
         }
     }
 
-    private async connectAndGetCollection() {
-        await this.client.connect();
-        const database = this.client.db('shopping-list-db');
-        const collection = database.collection('ItemsContainer');
-        return collection;
-    }
-
-    public async removeItemByPosition(positionInShoppingList: number): Promise<void> {
+    public async removeItemByID(id: string): Promise<void> {
+        if (!id || id === '') {
+            throw new Error('Illegal value for id');
+        }
         try {
             const collection = await this.connectAndGetCollection();
-            const deletedItem: Item = (await collection.findOneAndDelete({ "conversationID": this.conversationID, "item.positionInShoppingList": positionInShoppingList })).value.item; // TODO change position to id
-            console.dir(deletedItem);
+            const deletedItem: Item = (await collection.findOneAndDelete({ 'conversationID': this.conversationID, '_id': new ObjectId(id) })).value.item;
             const positionOfDeletedItem = deletedItem.positionInShoppingList;
-            await collection.updateMany({ "conversationID": this.conversationID, "item.positionInShoppingList": { $gt: positionOfDeletedItem } }, { $inc: { "item.positionInShoppingList": -1 } });
+            await collection.updateMany({ 'conversationID': this.conversationID, 'item.positionInShoppingList': { $gt: positionOfDeletedItem } }, { $inc: { 'item.positionInShoppingList': -1 } });
         } finally {
             await this.client.close();
         }
@@ -54,43 +55,18 @@ export class CosmosDBService {
     public async getAllItems(): Promise<Item[]> {
         try {
             const collection = await this.connectAndGetCollection();
-            return (await collection.find({ conversationID: this.conversationID }).toArray()).map(nestedItem => nestedItem.item);
+            const findResult = await collection.find({ conversationID: this.conversationID }).toArray();
+            findResult.forEach(nestedItem => { nestedItem.item.id = nestedItem._id; });
+            return findResult.map(nestedItem => nestedItem.item);
         } finally {
             await this.client.close();
         }
     };
 
-
-
-    // private async removeItem(itemID: string) {
-    //     const containerItem = this.container.item(itemID, this.conversationID);
-    //     const removedListItem: Item = (await containerItem.read()).resource;
-    //     await containerItem.delete();
-    //     return removedListItem;
-    // }
-
-    // private async updateItemPositionsAfterRemoval(positionOfRemoveItem: number) {
-    //     const itemsToBeUpdated = (await this.container.items.query(`SELECT * FROM c WHERE c.conversationID = '${this.conversationID}' AND c.item.positionInShoppingList > ${positionOfRemoveItem}`).fetchAll()).resources;
-    //     console.dir(itemsToBeUpdated[0]);
-    //     const containerItem = this.container.item(itemsToBeUpdated[0], this.conversationID);
-    //     try {
-    //         const i = new Item('Hello', true, 10);
-    //         await containerItem.replace(i);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //     console.log("containerItem.id");
-    //     // containerItem.id
-    //     // containerItem.replace(container);
-    //     // console.dir(itemsToBeUpdated);
-    //     // for (const item of itemsToBeUpdated) {
-    //     //     const containerItem = this.container.item(item.id, this.conversationID);
-    //     //     // console.dir(containerItem);
-    //     //     item.item.positionInShoppingList = item.item.positionInShoppingList++;
-    //     //     console.dir(item);
-    //     //     // const updated = await containerItem.replace({ body: item.id });
-    //     //     // console.dir(updated);
-    //     // }
-    //     // console.dir(itemsToBeUpdated);
-    // }
+    private async connectAndGetCollection() {
+        await this.client.connect();
+        const database = this.client.db('shopping-list-db');
+        const collection = database.collection('ItemsContainer');
+        return collection;
+    }
 }
