@@ -21,10 +21,18 @@ export class FunctionService {
         return fetch(`${this.baseUrl}/GetItemsFunction/${conversationId}`);
     }
 
-    public removeItemByPosition(conversationId: string, position: number): Promise<Response> {
-        return fetch(`${this.baseUrl}/RemoveItemByPositionFunction/${conversationId}/${position}`,
+    public removeItemByID(conversationId: string, itemID: string): Promise<Response> {
+        console.dir(itemID);
+        return fetch(`${this.baseUrl}/RemoveItemByIDFunction/${conversationId}/${itemID}`,
             {
-                method: 'delete',
+                method: 'delete'
+            });
+    }
+
+    public removeAllItems(conversationID: string) {
+        return fetch(`${this.baseUrl}/RemoveAllItemsFunction/${conversationID}`,
+            {
+                method: 'delete'
             });
     }
 }

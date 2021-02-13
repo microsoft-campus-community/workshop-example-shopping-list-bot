@@ -154,6 +154,7 @@ export class MainDialog extends ComponentDialog {
                     break;
                 }
                 const items = await itemsResponse.json() as Item[];
+                console.dir(items);
                 return await stepContext.beginDialog('getAllItemsDialog', items);
             case 'MarkItem':
                 console.log("mark item");
@@ -165,11 +166,18 @@ export class MainDialog extends ComponentDialog {
                 return await stepContext.beginDialog('unmarkItemDialog', itemToUnmark);
             case 'RemoveAll':
                 console.log('[DEBUG] remove all');
+                const response = await this.shoppingListFunctionService.removeAllItems(stepContext.context.activity.conversation.id);
+                if (!response.ok) {
+                    const couldNotRemoveItems = 'Sorry, I currently cannot remove all items. Please try again later.';
+                    await stepContext.context.sendActivity(couldNotRemoveItems, couldNotRemoveItems, InputHints.IgnoringInput);
+                    break;
+                }
                 return await stepContext.beginDialog('removeAllItemsDialog');
             case 'RemoveItem':
                 console.log('[DEBUG] remove item');
-                const itemToRemove = this.getItemWithNameOrPosition(luisResult);
-                const removedItem = await this.shoppingListFunctionService.removeItemByPosition(stepContext.context.activity.conversation.id, itemToRemove.positionInShoppingList);
+                const itemToRemove = this.getItemWithNameOrPosition(luisResult); // TODO! Get item id
+                const removedItem = await this.shoppingListFunctionService.removeItemByID(stepContext.context.activity.conversation.id, itemToRemove.id);
+                console.dir(removedItem);
                 if (!removedItem.ok) {
                     const couldNotRemoveItem = 'Sorry, I currently cannot remove this item. Please try again later.';
                     await stepContext.context.sendActivity(couldNotRemoveItem, couldNotRemoveItem, InputHints.IgnoringInput);
