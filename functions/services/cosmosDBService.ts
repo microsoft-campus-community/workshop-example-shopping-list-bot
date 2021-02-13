@@ -42,9 +42,10 @@ export class CosmosDBService {
     public async removeItemByPosition(positionInShoppingList: number): Promise<void> {
         try {
             const collection = await this.connectAndGetCollection();
-            const result = await collection.deleteOne({ item: { positionInShoppingList: positionInShoppingList } }); // TODO
-            console.dir(result);
-            // TODO update position of remaining ones with position > position of deleted item
+            const deletedItem: Item = (await collection.findOneAndDelete({ "conversationID": this.conversationID, "item.positionInShoppingList": positionInShoppingList })).value.item; // TODO change position to id
+            console.dir(deletedItem);
+            const positionOfDeletedItem = deletedItem.positionInShoppingList;
+            await collection.updateMany({ "conversationID": this.conversationID, "item.positionInShoppingList": { $gt: positionOfDeletedItem } }, { $inc: { "item.positionInShoppingList": -1 } });
         } finally {
             await this.client.close();
         }
@@ -57,7 +58,7 @@ export class CosmosDBService {
         } finally {
             await this.client.close();
         }
-    }
+    };
 
 
 
