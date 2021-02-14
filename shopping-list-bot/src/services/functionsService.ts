@@ -35,15 +35,14 @@ export class FunctionService {
     }
 
     public patchItemInShoppingList(conversationId: string, itemToPatch: Partial<Item>) : Promise<Response> {
-        console.log('patch');
-        console.dir(itemToPatch);
-        if(itemToPatch.itemName || itemToPatch.marked || itemToPatch.positionInShoppingList || itemToPatch.unit) {
-            return fetch(`${this.baseUrl}/PatchItemFunction/${conversationId}`,
-            {
-                method: "patch",
-                body: JSON.stringify(itemToPatch)
-            });
+        if(itemToPatch.id) {
+            if(itemToPatch.itemName || itemToPatch.marked || itemToPatch.positionInShoppingList || itemToPatch.unit) {
+                return fetch(`${this.baseUrl}/PatchItemFunction/${conversationId}/${itemToPatch.id}`,
+                {
+                    method: "patch",
+                    body: JSON.stringify(itemToPatch)
+                });
+            }
         }
-
     }
 }

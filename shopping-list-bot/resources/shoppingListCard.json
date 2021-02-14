@@ -10,7 +10,7 @@
         {
             
             "$data": "${items}",
-            "id": "${itemName}",
+            "id": "${id}",
             "type": "Input.Toggle",
             "title": "${if(unit.value, unit.value, '')} ${if(unit.unitName, unit.unitName, '')}  ${itemName}"
         }

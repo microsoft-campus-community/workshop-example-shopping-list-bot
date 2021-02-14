@@ -1,6 +1,7 @@
 import { Activity, Middleware, ResourceResponse, TurnContext } from "botbuilder";
 import { IUpdateMultipleItemsDialogInput } from "../dialogs/updateMultipleItemsDialog";
 import { Item } from "../models/item";
+import { IItemUpdateResponse } from "../models/itemUpdateResponse";
 import { FunctionService } from "../services/functionsService";
 
 export class ShoppingListAdaptiveCardResponseMiddleware implements Middleware{
@@ -37,7 +38,8 @@ export class ShoppingListAdaptiveCardResponseMiddleware implements Middleware{
                 const updateCallResponse = updateCalls[index];
                 const result = await updateCallResponse;
                 if (!result.ok) {
-                    const itemThatCouldNotBeUpdated = await result.json() as Item;
+                    const response =  await result.json() as IItemUpdateResponse;
+                    const itemThatCouldNotBeUpdated  = response.item;
                     couldUpdateAllItems = false;
                     if (itemThatCouldNotBeUpdated) {
                         if (!itemThatCouldNotBeUpdated) {
@@ -66,13 +68,13 @@ export class ShoppingListAdaptiveCardResponseMiddleware implements Middleware{
     
     private parseAdaptiveCardForMarkedItemsUpdate(adaptiveCardPayload: Record<string, boolean>): Partial<Item>[]{
         const itemsToUpdate: Partial<Item>[] = [];
-        Object.keys(adaptiveCardPayload).forEach(itemNameKey => {
-            const itemMarkedValueString = adaptiveCardPayload[itemNameKey];
+        Object.keys(adaptiveCardPayload).forEach(itemIdKey => {
+            const itemMarkedValueString = adaptiveCardPayload[itemIdKey];
             if (typeof itemMarkedValueString === 'string') {
                 const itemMarkedValue = JSON.parse(itemMarkedValueString);
                 itemsToUpdate.push(
                     {
-                        itemName: itemNameKey,
+                        id: itemIdKey,
                         marked: itemMarkedValue
                     }
                 )
