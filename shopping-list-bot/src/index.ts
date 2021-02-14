@@ -32,7 +32,7 @@ const REMOVE_ITEM_DIALOG = 'removeItemDialog';
 // The helper-class recognizer that calls LUIS
 import { ShoppingListRecognizer } from './dialogs/addItemRecognizer';
 import { GetAllItemsDialog } from './dialogs/getAllItemsDialog';
-import { QueryItemNameOrPositionDialog } from './dialogs/queryItemNameOrPositionDialog';
+import { QueryItemIdDialog } from './dialogs/queryItemIdDialog';
 import { RemoveAllItemsDialog } from './dialogs/removeAllItemsDialog';
 import { FunctionService } from './services/functionsService';
 import { UpdateMultipleItemsDialog } from './dialogs/updateMultipleItemsDialog';
@@ -96,9 +96,9 @@ const functionService = new FunctionService(process.env.FunctionsBaseURL);
 // Create the main dialog.
 const addItemDialog = new AddItemDialog(ADD_ITEM_DIALOG);
 const getAllItemsDialog = new GetAllItemsDialog(GET_ALL_ITEMS_DIALOG);
-const markItemDialog = new QueryItemNameOrPositionDialog(MARK_ITEM_DIALOG, 'Which item do you want to mark?');
-const unmarkItemDialog = new QueryItemNameOrPositionDialog(UNMARK_ITEM_DIALOG, 'Which item do you want to mark as not done?');
-const removeItemDialog = new QueryItemNameOrPositionDialog(REMOVE_ITEM_DIALOG, 'Which item do you want to remove?');
+const markItemDialog = new QueryItemIdDialog(MARK_ITEM_DIALOG, 'Which item do you want to mark?');
+const unmarkItemDialog = new QueryItemIdDialog(UNMARK_ITEM_DIALOG, 'Which item do you want to mark as not done?');
+const removeItemDialog = new QueryItemIdDialog(REMOVE_ITEM_DIALOG, 'Which item do you want to remove?');
 const removeAllItemsDialog = new RemoveAllItemsDialog(REMOVE_ALL_ITEMS_DIALOG);
 
 const dialog = new MainDialog(luisRecognizer, addItemDialog, getAllItemsDialog, markItemDialog, unmarkItemDialog, removeItemDialog, removeAllItemsDialog, functionService);

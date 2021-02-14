@@ -8,13 +8,11 @@ export class Item {
     public positionInShoppingList: number;
     public unit?: Unit;
 
-    toString(): string {
-        
+     toString(): string {
             let unitText = '';
             if (this.unit) {
-                unitText = this.unit.unitName ? `${this.unit.value} ${this.unit.unitName} `: this.unit.value.toString();
+                unitText = this.unit.unitName ? `${this.unit.value} ${this.unit.unitName}`: this.unit.value.toString();
             }
-            return `${unitText}${this.itemName}`;
-       
+            return `${unitText} ${this.itemName}`;
     }
 }

@@ -81,11 +81,16 @@ export class CosmosDBService {
         try {
             const collection = await this.connectAndGetCollection();
             const findResult = await collection.find({ conversationID: this.conversationID }).toArray();
-            return findResult.map(dbDocument => {
+            console.dir(findResult);
+            
+            const result = findResult.map(dbDocument => {
                 const item: Item = dbDocument.item;
                 item.id = dbDocument._id;
                 return item;
             });
+            console.dir(result);
+            await this.client.close();
+            return result;
         } finally {
             await this.client.close();
         }

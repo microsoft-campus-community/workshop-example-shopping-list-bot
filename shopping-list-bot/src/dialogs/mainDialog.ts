@@ -19,13 +19,14 @@ import {
     WaterfallDialog,
     WaterfallStepContext
 } from 'botbuilder-dialogs';
-import { AddItemDialog } from './addItemDialog';
+import { AddItemDialog, IAddItemDialogResult } from './addItemDialog';
 import { ShoppingListRecognizer } from './addItemRecognizer';
 import { GetAllItemsDialog } from './getAllItemsDialog';
-import { QueryItemNameOrPositionDialog } from './queryItemNameOrPositionDialog';
+import { IQueryItemIdDialogInput, IQueryItemIdDialogResult, QueryItemIdDialog } from './queryItemIdDialog';
 import { RemoveAllItemsDialog } from './removeAllItemsDialog';
 import { FunctionService } from '../services/functionsService';
 import { IUpdateMultipleItemsDialogInput, UpdateMultipleItemsDialog } from './updateMultipleItemsDialog';
+import { IDialogResult } from '../models/dialogResult';
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
 
@@ -33,7 +34,7 @@ export class MainDialog extends ComponentDialog {
     private luisRecognizer: ShoppingListRecognizer;
     private shoppingListFunctionService: FunctionService;
 
-    constructor(luisRecognizer: ShoppingListRecognizer, addItemDialog: AddItemDialog, getAllItemsDialog: GetAllItemsDialog, markItemDialog: QueryItemNameOrPositionDialog, unmarkItemDialog: QueryItemNameOrPositionDialog, removeSingleItemDialog: QueryItemNameOrPositionDialog, removeAllItemsDialog: RemoveAllItemsDialog, shoppingListFunctionService: FunctionService) {
+    constructor(luisRecognizer: ShoppingListRecognizer, addItemDialog: AddItemDialog, getAllItemsDialog: GetAllItemsDialog, markItemDialog: QueryItemIdDialog, unmarkItemDialog: QueryItemIdDialog, removeSingleItemDialog: QueryItemIdDialog, removeAllItemsDialog: RemoveAllItemsDialog, shoppingListFunctionService: FunctionService) {
         super('MainDialog');
 
         if (!luisRecognizer) throw new Error('[MainDialog]: Missing parameter \'luisRecognizer\' is required');
@@ -82,13 +83,13 @@ export class MainDialog extends ComponentDialog {
         dialogSet.add(this);
         const dialogContext = await dialogSet.createContext(context);
 
-        const results =  await dialogContext.continueDialog();
+        const results = await dialogContext.continueDialog();
         if (results.status === DialogTurnStatus.empty) {
             await dialogContext.beginDialog(this.id);
         }
     }
 
-   
+
 
     /**
      * First step in the waterfall dialog. Prompts the user for a command.
@@ -113,7 +114,7 @@ export class MainDialog extends ComponentDialog {
      */
     private async actStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const item = new Item();
-       
+
         if (!this.luisRecognizer.isConfigured) {
             // LUIS is not configured, we just run the BookingDialog path.
             return await stepContext.beginDialog('addItemDialog', item);
@@ -123,6 +124,8 @@ export class MainDialog extends ComponentDialog {
         const luisResult = await this.luisRecognizer.executeLuisQuery(stepContext.context);
         console.dir(luisResult);
         console.log("before switch");
+        const conversationId = stepContext.context.activity.conversation.id;
+        console.log(conversationId);
         switch (LuisRecognizer.topIntent(luisResult)) {
             case 'AddItem':
                 console.log("add item dialog");
@@ -131,6 +134,7 @@ export class MainDialog extends ComponentDialog {
                 item.itemName = itemName;
                 item.unit = unit;
                 return await stepContext.beginDialog('addItemDialog', item);
+
             // const itemToAddResult = await stepContext.beginDialog('addItemDialog', item);
             // const itemToAdd = itemToAddResult.result as Item;
             // console.dir(itemToAddResult);
@@ -151,27 +155,52 @@ export class MainDialog extends ComponentDialog {
             // break;
             case 'GetAll':
                 console.log("get all");
-                const itemsResponse = await this.shoppingListFunctionService.getItemsInShoppingList(stepContext.context.activity.conversation.id);
+                const itemsResponse = await this.shoppingListFunctionService.getItemsInShoppingList(conversationId);
 
                 if (!itemsResponse.ok) {
                     const couldNotGetItems = 'Sorry, I can not get all items in your shopping list currently. Please try again later.';
                     await stepContext.context.sendActivity(couldNotGetItems, couldNotGetItems, InputHints.IgnoringInput);
                     break;
                 }
-                const items = await itemsResponse.json() as Item[];
-                console.dir(items);
-                return await stepContext.beginDialog('getAllItemsDialog', items);
+                const allItems = await itemsResponse.json() as Item[];
+                return await stepContext.beginDialog('getAllItemsDialog', allItems);
             case 'MarkItem':
                 console.log("mark item");
                 const itemToMark = this.getItemWithNameOrPosition(luisResult);
-                return await stepContext.beginDialog('markItemDialog', itemToMark);
+                const itemsInShoppingListMarkResponse = await this.shoppingListFunctionService.getItemsInShoppingList(conversationId);
+                if (!itemsInShoppingListMarkResponse.ok) {
+                    const couldNotGetItems = 'Sorry, I can not get all items in your shopping list currently. Please try again later.';
+                    await stepContext.context.sendActivity(couldNotGetItems, couldNotGetItems, InputHints.IgnoringInput);
+                    break;
+                }
+                console.log("itemsInShoppingListMarkResponse");
+                console.dir(itemsInShoppingListMarkResponse);
+                const itemsInShoppingListMark = await itemsInShoppingListMarkResponse.json() as Item[];
+                console.dir(itemsInShoppingListMark);
+                const markItemInput: IQueryItemIdDialogInput = {
+                    itemsInList: itemsInShoppingListMark,
+                    itemToFindInList: itemToMark
+                }
+                return stepContext.beginDialog('markItemDialog', markItemInput);
             case 'UnmarkItem':
                 console.log("unmark item");
                 const itemToUnmark = this.getItemWithNameOrPosition(luisResult);
-                return await stepContext.beginDialog('unmarkItemDialog', itemToUnmark);
+                const itemsInShoppingListUnmarkResponse = await this.shoppingListFunctionService.getItemsInShoppingList(conversationId);
+                if (!itemsInShoppingListUnmarkResponse.ok) {
+                    const couldNotGetItems = 'Sorry, I can not get all items in your shopping list currently. Please try again later.';
+                    await stepContext.context.sendActivity(couldNotGetItems, couldNotGetItems, InputHints.IgnoringInput);
+                    break;
+                }
+                const itemsInShoppingListUnmark = await itemsInShoppingListUnmarkResponse.json() as Item[];
+
+                const unmarkItemInput: IQueryItemIdDialogInput = {
+                    itemsInList: itemsInShoppingListUnmark,
+                    itemToFindInList: itemToUnmark
+                }
+                return await stepContext.beginDialog('unmarkItemDialog', unmarkItemInput);
             case 'RemoveAll':
                 console.log('[DEBUG] remove all');
-                const response = await this.shoppingListFunctionService.removeAllItems(stepContext.context.activity.conversation.id);
+                const response = await this.shoppingListFunctionService.removeAllItems(conversationId);
                 if (!response.ok) {
                     const couldNotRemoveItems = 'Sorry, I currently cannot remove all items. Please try again later.';
                     await stepContext.context.sendActivity(couldNotRemoveItems, couldNotRemoveItems, InputHints.IgnoringInput);
@@ -180,15 +209,20 @@ export class MainDialog extends ComponentDialog {
                 return await stepContext.beginDialog('removeAllItemsDialog');
             case 'RemoveItem':
                 console.log('[DEBUG] remove item');
-                const itemToRemove = this.getItemWithNameOrPosition(luisResult); // TODO! Get item id
-                const removedItem = await this.shoppingListFunctionService.removeItemByID(stepContext.context.activity.conversation.id, itemToRemove.id);
-                console.dir(removedItem);
-                if (!removedItem.ok) {
-                    const couldNotRemoveItem = 'Sorry, I currently cannot remove this item. Please try again later.';
-                    await stepContext.context.sendActivity(couldNotRemoveItem, couldNotRemoveItem, InputHints.IgnoringInput);
+                const itemToRemove = this.getItemWithNameOrPosition(luisResult);
+                const itemsInShoppingListRemoveResponse = await this.shoppingListFunctionService.getItemsInShoppingList(conversationId);
+                if (!itemsInShoppingListRemoveResponse.ok) {
+                    const couldNotGetItems = 'Sorry, I can not get all items in your shopping list currently. Please try again later.';
+                    await stepContext.context.sendActivity(couldNotGetItems, couldNotGetItems, InputHints.IgnoringInput);
                     break;
                 }
-                return await stepContext.beginDialog('removeItemDialog', itemToRemove);
+                const itemsInShoppingListRemove = await itemsInShoppingListRemoveResponse.json() as Item[];
+
+                const removeItemInput: IQueryItemIdDialogInput = {
+                    itemsInList: itemsInShoppingListRemove,
+                    itemToFindInList: itemToRemove
+                }
+                return await stepContext.beginDialog('removeItemDialog', removeItemInput);
             default:
                 // Catch all for unhandled intents
                 const didntUnderstandMessageText = `Sorry, I didn't get that. Please try asking in a different way (intent was ${LuisRecognizer.topIntent(luisResult)})`;;
@@ -216,30 +250,99 @@ export class MainDialog extends ComponentDialog {
     private async finalStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         // If the child dialog ("addItemDialog") was cancelled or the user failed to confirm, the result here will be null.
         console.log("final step");
+        console.dir(stepContext.result);
         if (stepContext.result) {
-            const result = stepContext.result as Item;
-            // TODO This is where calls to the Azure Functions or Shopping ListGraph API would go
+            const conversationId = stepContext.context.activity.conversation.id;
+            const dialogResult = stepContext.result as IDialogResult;
+            switch (dialogResult.dialogId) {
+                case 'addItemDialog':
+                    const addItemDialogResult = dialogResult as IAddItemDialogResult;
 
-            // If the call to Azure function or Shopping List Graph API is successfull, tell the user.
+                    const itemToAdd = addItemDialogResult.itemToAdd;
+                    let itemAddedMessage = 'Something went wrong trying to add an item.';
+                    if (itemToAdd) {
+                        const addedResult = await this.shoppingListFunctionService.addItem(conversationId, itemToAdd);
+                        console.dir(addedResult.statusText);
+                        if (!addedResult.ok) {
+                            //TODO more specific error to tell the user what was wrong.
+                            itemAddedMessage = `Sorry, I could not add ${itemToAdd.toString()}`;
+                        } else {
+                            itemAddedMessage = `I added ${itemToAdd.toString()} to your shopping list`;
+                        }
+                    }
 
-            const addedResult = await this.shoppingListFunctionService.addItem(stepContext.context.activity.conversation.id, result);
-            console.dir(addedResult.statusText);
-            if (!addedResult.ok) {
-                //TODO more specific error to tell the user what was wrong.
-                const couldNotAddMessage = `Sorry, I could not add ${result.itemName}`;
-                await stepContext.context.sendActivity(couldNotAddMessage, couldNotAddMessage, InputHints.IgnoringInput);
-            } else {
-                const addedSuccessMessage = `I added ${result.itemName} to your shopping list`;
-                await stepContext.context.sendActivity(addedSuccessMessage, addedSuccessMessage, InputHints.IgnoringInput);
+                    await stepContext.context.sendActivity(itemAddedMessage, itemAddedMessage, InputHints.IgnoringInput);
+
+                    break;
+                case 'markItemDialog':
+                    const markItemDialogResult = dialogResult as IQueryItemIdDialogResult;
+                    console.log("marked query result:");
+                    console.dir(markItemDialogResult);
+                    let message = "Sorry, something went wrong trying to mark an item in your shopping list as complete.";
+                    if (markItemDialogResult && markItemDialogResult.foundItemId) {
+                        const patchedItemMark: Partial<Item> = {
+                            id: markItemDialogResult.foundItemId,
+                            marked: true
+                        }
+                        const patchedItemMarkResponse = await this.shoppingListFunctionService.patchItemInShoppingList(conversationId, patchedItemMark);
+                        const patchedItemMarkResponseBody = await patchedItemMarkResponse.json();
+                        console.log("marked funtions response:");
+                        console.dir(patchedItemMarkResponseBody);
+                        const itemFromBodyMarked = patchedItemMarkResponseBody.item as Item;
+                        if (!patchedItemMarkResponse.ok) {
+                            if (itemFromBodyMarked) {
+                                message = `Sorry, I could not mark ${itemFromBodyMarked.toString()} as complete.`;
+                            }
+                        } else {
+                            if (itemFromBodyMarked) {
+                                message = `I've marked ${itemFromBodyMarked.toString()} as complete.`;
+                            } else {
+                                message = 'I was successful marking the item in your shopping list as complete';
+                            }
+                        }
+                    }
+                    await stepContext.context.sendActivity(message, message, InputHints.IgnoringInput);
+                    break;
+                case 'removeItemDialog':
+                    const removeItemDialogResult = dialogResult as IQueryItemIdDialogResult;
+                    let removeMessage = "Sorry, something went wrong deleting one item.";
+                    if (removeItemDialogResult && removeItemDialogResult.foundItemId) {
+                        const removeItemServiceResponse = await this.shoppingListFunctionService.removeItemByID(conversationId, removeItemDialogResult.foundItemId);
+                        if (removeItemServiceResponse.ok) {
+                            removeMessage = 'I deleted the item from the shopping list for you.';
+
+                        }
+                    }
+                    await stepContext.context.sendActivity(removeMessage, removeMessage, InputHints.IgnoringInput);
+                    break;
+                case 'unmarkItemDialog':
+                    const unmarkItemDialogResult = dialogResult as IQueryItemIdDialogResult;
+                    let unmarkMessage = "Sorry, something went wrong trying to change an item in your shopping list as not complete.";
+                    if (unmarkItemDialogResult && unmarkItemDialogResult.foundItemId) {
+                        const patchedItemUnmark: Partial<Item> = {
+                            id: unmarkItemDialogResult.foundItemId,
+                            marked: false
+                        }
+                        const patchedItemUnmarkResponse = await this.shoppingListFunctionService.patchItemInShoppingList(conversationId, patchedItemUnmark);
+                        const patchedItemUnmarkResponseBody = await patchedItemUnmarkResponse.json();
+                        const itemFromBodyUnmarked = patchedItemUnmarkResponseBody.item as Item;
+                        if (!patchedItemUnmarkResponseBody.ok) {
+                            if (itemFromBodyUnmarked) {
+                                unmarkMessage = `Sorry, I could not update ${itemFromBodyUnmarked.toString()} as not complete.`;
+                            }
+                        } else {
+                            if (itemFromBodyUnmarked) {
+                                unmarkMessage = `${itemFromBodyUnmarked.toString()} is now marked as not complete.`;
+                            } else {
+                                unmarkMessage = 'I was successful marking the item in your shopping list as not complete';
+                            }
+                        }
+                    }
+                    await stepContext.context.sendActivity(unmarkMessage, unmarkMessage, InputHints.IgnoringInput);
+                    break;
             }
-            // let message: string;
-            // if (result.unit) {
-            //     message = `I have added ${result.unit.value} ${result.unit.unitName} ${result.itemName} to your shopping list.`;
-            // } else {
-            //     message = `I have added ${result.itemName} to your shopping list.`;
-            // }
-            // await stepContext.context.sendActivity(message);
         }
+
         // Restart the main dialog waterfall with a different message the second time around
         return await stepContext.replaceDialog(this.initialDialogId, { restartMsg: 'What else can I do for you?' });
     }

@@ -37,7 +37,7 @@ export class FunctionService {
     public patchItemInShoppingList(conversationId: string, itemToPatch: Partial<Item>) : Promise<Response> {
         if(itemToPatch.id) {
             if(itemToPatch.itemName || itemToPatch.marked || itemToPatch.positionInShoppingList || itemToPatch.unit) {
-                return fetch(`${this.baseUrl}/PatchItemFunction/${conversationId}/${itemToPatch.id}`,
+                return fetch(`${this.baseUrl}/UpdateItem/${conversationId}/${itemToPatch.id}`,
                 {
                     method: "patch",
                     body: JSON.stringify(itemToPatch)
