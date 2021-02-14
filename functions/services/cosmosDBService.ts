@@ -42,27 +42,22 @@ export class CosmosDBService {
 
 
 
-    public async updateItem(itemToUpdate: Partial<Item>) {
+    public async updateItem(itemId: string, itemToUpdate: Partial<Item>) {
         try {
-            await this.client.connect();
-            const database = this.client.db('shopping-list-db');
-            const collection = database.collection('ItemsContainer');
-            let filter: FilterQuery<any>;
-            if (itemToUpdate.positionInShoppingList && itemToUpdate.itemName === undefined) {
-                filter = { 'item.positionInShoppingList': itemToUpdate.positionInShoppingList, 'conversationID': this.conversationID };
-            } else if (itemToUpdate !== undefined) {
-                filter = { 'item.itemName': itemToUpdate.itemName, 'conversationID': this.conversationID };
+            const collection = await this.connectAndGetCollection();
+            const filter: FilterQuery<any> = { 'conversationID': this.conversationID, '_id': new ObjectId(itemId) };
+            const markedUpdate = itemToUpdate.marked === undefined ? undefined : {'item.marked': itemToUpdate.marked};
+            const unitUpdate = itemToUpdate.unit === undefined ? undefined : {'item.unit': itemToUpdate.unit};
+            const itemNameUpdate = itemToUpdate.itemName === undefined ? undefined : {'item.itemName': itemToUpdate.itemName};
+            const updatedDbItem = {
+                ...markedUpdate,
+                ...unitUpdate,
+                ...itemNameUpdate
 
-            } else {
-                throw new Error('Need itemNam or positionInShoppingList to update item');
-            }
-            collection.updateOne(filter, {
-                conversationID: this.conversationID,
-                item: itemToUpdate
-            });
-        } catch (err) {
-            console.dir(err);
-        } finally {
+            };
+            return await collection.findOneAndUpdate(filter, {$set:updatedDbItem}, {returnOriginal:false})
+        
+        }finally {
             // Ensures that the client will close when you finish/error
             await this.client.close();
         }

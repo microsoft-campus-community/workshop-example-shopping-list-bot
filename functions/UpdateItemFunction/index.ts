@@ -4,7 +4,9 @@ import { CosmosDBService } from "../services/cosmosDBService";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     const conversationID = context.bindingData.conversationID;
-    if (!conversationID || !req.body || (!req.body.itemName && !req.body.positionInShoppingList)) {
+    const itemID = context.bindingData.itemID;
+
+    if (!conversationID || !itemID || !req.body || req.body.positionInShoppingList !== undefined) {
         context.res = {
             status: 400,
             body: {
@@ -13,20 +15,13 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             }
         };
         context.done();
+        return;
     }
-    const body = req.body;
-    let itemToUpdate: Partial<Item>;
-    if(body.positionInShoppingList && body.marked){
-        itemToUpdate = {
-            positionInShoppingList: body.positionInShoppingList,
-            marked: body.marked
-        }
-    }
-    console.dir(itemToUpdate);
+  
     try {
         const cosmosService = new CosmosDBService(conversationID);
        
-        const updatedItem = await cosmosService.updateItem(itemToUpdate);
+        const updatedItem = await cosmosService.updateItem(itemID, req.body);
         context.res = {
             status: 200,
             body: {
@@ -36,7 +31,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     } catch (error) {
         context.res = {
             status: 404,
-            body:  { item: itemToUpdate, message: error }
+            body:  { item: req.body, message: error }
         };
     } finally {
         context.done();
