@@ -1,5 +1,6 @@
 import { Item } from "../models/item";
 import { FilterQuery, MongoClient, ObjectId } from 'mongodb';
+import { ItemDb } from "../models/itemDb";
 
 export class CosmosDBService {
 
@@ -23,7 +24,7 @@ export class CosmosDBService {
             const positionInShoppingList: number = await collection.find({ conversationID: this.conversationID }).count() + 1;
             return await collection.insertOne({
                 conversationID: this.conversationID,
-                item: new Item(item.itemName, item.marked, positionInShoppingList, item.unit)
+                item: new ItemDb(item.itemName, item.marked, positionInShoppingList, item.unit)
             });
         } finally {
             await this.client.close();
@@ -85,8 +86,11 @@ export class CosmosDBService {
         try {
             const collection = await this.connectAndGetCollection();
             const findResult = await collection.find({ conversationID: this.conversationID }).toArray();
-            findResult.forEach(nestedItem => { nestedItem.item.id = nestedItem._id; });
-            return findResult.map(nestedItem => nestedItem.item);
+            return findResult.map(dbDocument => {
+                const item: Item = dbDocument.item;
+                item.id = dbDocument._id;
+                return item;
+            });
         } finally {
             await this.client.close();
         }
