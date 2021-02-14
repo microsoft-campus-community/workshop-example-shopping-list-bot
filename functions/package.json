@@ -10,7 +10,6 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
-    "@azure/cosmos": "^3.9.5",
     "mongodb": "^3.6.4"
   },
   "devDependencies": {

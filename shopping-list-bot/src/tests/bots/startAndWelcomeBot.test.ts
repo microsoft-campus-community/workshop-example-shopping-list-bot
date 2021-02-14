@@ -4,7 +4,8 @@
  */
 import { ActivityTypes, ConversationState, MemoryStorage, TestAdapter, TurnContext, UserState } from 'botbuilder';
 import { Dialog, DialogSet, DialogTurnStatus } from 'botbuilder-dialogs';
-import { DialogAndWelcomeBot } from '../../bots/dialogAndWelcomeBot';
+import { StartAndWelcomeBot } from '../../bots/startAndWelcomeBot';
+import { FunctionService } from '../../services/functionsService';
 const assert = require('assert');
 
 /**
@@ -43,7 +44,7 @@ describe('DialogAndWelcomeBot', () => {
     it('Shows welcome card on member added and starts main dialog', async () => {
         const mockRootDialog = new MockRootDialog();
         const memoryStorage = new MemoryStorage();
-        const sut = new DialogAndWelcomeBot(new ConversationState(memoryStorage), new UserState(memoryStorage), mockRootDialog);
+        const sut = new StartAndWelcomeBot(new ConversationState(memoryStorage), new UserState(memoryStorage), mockRootDialog);
 
         // Create conversationUpdate activity
         const conversationUpdateActivity = {

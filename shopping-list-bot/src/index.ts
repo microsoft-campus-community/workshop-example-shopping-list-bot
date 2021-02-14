@@ -16,7 +16,7 @@ import { BotFrameworkAdapter, ConversationState, MemoryStorage, UserState } from
 import { LuisApplication } from 'botbuilder-ai';
 
 // The bot and its main dialog.
-import { DialogAndWelcomeBot } from './bots/dialogAndWelcomeBot';
+import {  StartAndWelcomeBot } from './bots/startAndWelcomeBot';
 import { MainDialog } from './dialogs/mainDialog';
 
 // The bot's booking dialog
@@ -28,12 +28,15 @@ const UNMARK_ITEM_DIALOG = 'unmarkItemDialog';
 const REMOVE_ALL_ITEMS_DIALOG = 'removeAllItemsDialog';
 const REMOVE_ITEM_DIALOG = 'removeItemDialog';
 
+
 // The helper-class recognizer that calls LUIS
 import { ShoppingListRecognizer } from './dialogs/addItemRecognizer';
 import { GetAllItemsDialog } from './dialogs/getAllItemsDialog';
 import { QueryItemNameOrPositionDialog } from './dialogs/queryItemNameOrPositionDialog';
 import { RemoveAllItemsDialog } from './dialogs/removeAllItemsDialog';
 import { FunctionService } from './services/functionsService';
+import { UpdateMultipleItemsDialog } from './dialogs/updateMultipleItemsDialog';
+import { ShoppingListAdaptiveCardResponseMiddleware } from './middleware/ShoppingListAdaptiveCardResponseMiddleware';
 
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about adapters.
@@ -41,6 +44,7 @@ const adapter = new BotFrameworkAdapter({
     appId: process.env.MicrosoftAppId,
     appPassword: process.env.MicrosoftAppPassword
 });
+
 
 // Catch-all for errors.
 const onTurnErrorHandler = async (context, error) => {
@@ -86,6 +90,9 @@ const luisConfig: LuisApplication = { applicationId: LuisAppId, endpointKey: Lui
 
 luisRecognizer = new ShoppingListRecognizer(luisConfig);
 
+
+const functionService = new FunctionService(process.env.FunctionsBaseURL);
+
 // Create the main dialog.
 const addItemDialog = new AddItemDialog(ADD_ITEM_DIALOG);
 const getAllItemsDialog = new GetAllItemsDialog(GET_ALL_ITEMS_DIALOG);
@@ -93,8 +100,12 @@ const markItemDialog = new QueryItemNameOrPositionDialog(MARK_ITEM_DIALOG, 'Whic
 const unmarkItemDialog = new QueryItemNameOrPositionDialog(UNMARK_ITEM_DIALOG, 'Which item do you want to mark as not done?');
 const removeItemDialog = new QueryItemNameOrPositionDialog(REMOVE_ITEM_DIALOG, 'Which item do you want to remove?');
 const removeAllItemsDialog = new RemoveAllItemsDialog(REMOVE_ALL_ITEMS_DIALOG);
-const dialog = new MainDialog(luisRecognizer, addItemDialog, getAllItemsDialog, markItemDialog, unmarkItemDialog, removeItemDialog, removeAllItemsDialog, new FunctionService(process.env.FunctionsBaseURL));
-const bot = new DialogAndWelcomeBot(conversationState, userState, dialog);
+
+const dialog = new MainDialog(luisRecognizer, addItemDialog, getAllItemsDialog, markItemDialog, unmarkItemDialog, removeItemDialog, removeAllItemsDialog, functionService);
+const bot = new StartAndWelcomeBot(conversationState, userState, dialog);
+
+
+adapter.use(new ShoppingListAdaptiveCardResponseMiddleware(functionService));
 
 // Create HTTP server
 const server = restify.createServer();

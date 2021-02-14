@@ -1,5 +1,5 @@
 import { Item } from "../models/item";
-import { MongoClient, ObjectId } from "mongodb";
+import { FilterQuery, MongoClient, ObjectId } from 'mongodb';
 
 export class CosmosDBService {
 
@@ -10,6 +10,7 @@ export class CosmosDBService {
             throw new Error('Illegal value for conversationID');
         }
         this.conversationID = conversationID;
+
         this.client = new MongoClient(process.env.SHOPPING_LIST_COSMOSDB, { useUnifiedTopology: true });
     }
 
@@ -34,6 +35,34 @@ export class CosmosDBService {
             const collection = await this.connectAndGetCollection();
             await collection.deleteMany({ conversationID: this.conversationID });
         } finally {
+            await this.client.close();
+        }
+    }
+
+
+
+    public async updateItem(itemToUpdate: Partial<Item>) {
+        try {
+            await this.client.connect();
+            const database = this.client.db('shopping-list-db');
+            const collection = database.collection('ItemsContainer');
+            let filter: FilterQuery<any>;
+            if (itemToUpdate.positionInShoppingList && itemToUpdate.itemName === undefined) {
+                filter = { 'item.positionInShoppingList': itemToUpdate.positionInShoppingList, 'conversationID': this.conversationID };
+            } else if (itemToUpdate !== undefined) {
+                filter = { 'item.itemName': itemToUpdate.itemName, 'conversationID': this.conversationID };
+
+            } else {
+                throw new Error('Need itemNam or positionInShoppingList to update item');
+            }
+            collection.updateOne(filter, {
+                conversationID: this.conversationID,
+                item: itemToUpdate
+            });
+        } catch (err) {
+            console.dir(err);
+        } finally {
+            // Ensures that the client will close when you finish/error
             await this.client.close();
         }
     }

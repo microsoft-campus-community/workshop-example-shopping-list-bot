@@ -53,7 +53,6 @@ export class AddItemDialog extends CancelAndHelpDialog {
         console.log("final step add item dialog");
         const unit = stepContext.result as Unit;
         (stepContext.options as Item).unit = unit;
-        console.dir(stepContext.options);
 
         return await stepContext.endDialog(stepContext.options);
     }

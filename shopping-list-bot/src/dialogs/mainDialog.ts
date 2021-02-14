@@ -10,6 +10,7 @@ import { LuisRecognizer } from 'botbuilder-ai';
 
 import {
     ComponentDialog,
+    DialogContext,
     DialogSet,
     DialogState,
     DialogTurnResult,
@@ -24,6 +25,7 @@ import { GetAllItemsDialog } from './getAllItemsDialog';
 import { QueryItemNameOrPositionDialog } from './queryItemNameOrPositionDialog';
 import { RemoveAllItemsDialog } from './removeAllItemsDialog';
 import { FunctionService } from '../services/functionsService';
+import { IUpdateMultipleItemsDialogInput, UpdateMultipleItemsDialog } from './updateMultipleItemsDialog';
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
 
@@ -79,11 +81,14 @@ export class MainDialog extends ComponentDialog {
         const dialogSet = new DialogSet(accessor);
         dialogSet.add(this);
         const dialogContext = await dialogSet.createContext(context);
-        const results = await dialogContext.continueDialog();
+
+        const results =  await dialogContext.continueDialog();
         if (results.status === DialogTurnStatus.empty) {
             await dialogContext.beginDialog(this.id);
         }
     }
+
+   
 
     /**
      * First step in the waterfall dialog. Prompts the user for a command.
@@ -108,7 +113,7 @@ export class MainDialog extends ComponentDialog {
      */
     private async actStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const item = new Item();
-
+       
         if (!this.luisRecognizer.isConfigured) {
             // LUIS is not configured, we just run the BookingDialog path.
             return await stepContext.beginDialog('addItemDialog', item);
