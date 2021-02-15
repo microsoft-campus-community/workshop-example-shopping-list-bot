@@ -13,7 +13,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 message: 'invalid input'
             }
         };
-        context.done();
         return;
     }
 
@@ -33,12 +32,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             status: 404,
             body: { item: req.body, message: error }
         };
-    } finally {
-        context.done();
     }
-
-
-
 };
 
 export default httpTrigger;
