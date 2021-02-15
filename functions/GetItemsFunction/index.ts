@@ -10,7 +10,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 message: 'invalid input: conversation id required'
             }
         };
-        context.done();
+        return;
     }
 
     try {
@@ -26,8 +26,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             body: { message: 'Error in retrieving items' }
         };
     }
-    context.done();
-
 };
 
 export default httpTrigger;

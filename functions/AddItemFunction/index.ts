@@ -1,4 +1,4 @@
-import { AzureFunction, Context, ContextBindings, HttpRequest } from "@azure/functions";
+import { AzureFunction, Context, HttpRequest } from "@azure/functions";
 import { Item } from "../models/item";
 import { CosmosDBService } from "../services/cosmosDBService";
 
@@ -13,7 +13,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 message: 'invalid input'
             }
         };
-        context.done();
+        return;
     }
 
     try {
@@ -31,7 +31,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             }
         };
     }
-    context.done();
 };
 
 export default httpTrigger;
