@@ -18,7 +18,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     try {
         const cosmosService: CosmosDBService = new CosmosDBService(conversationID);
-        const itemAdded: Item = (await cosmosService.addItem(req.body)).ops[0].item;
+        const itemAdded: Item = await cosmosService.addItem(req.body);
         context.res = {
             status: 201,
             body: itemAdded

@@ -1,5 +1,4 @@
-import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import { Item } from "../models/item";
+import { AzureFunction, Context, HttpRequest } from "@azure/functions";
 import { CosmosDBService } from "../services/cosmosDBService";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
@@ -17,10 +16,10 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         context.done();
         return;
     }
-  
+
     try {
         const cosmosService = new CosmosDBService(conversationID);
-       
+
         const updatedItem = await cosmosService.updateItem(itemID, req.body);
         context.res = {
             status: 200,
@@ -32,7 +31,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     } catch (error) {
         context.res = {
             status: 404,
-            body:  { item: req.body, message: error }
+            body: { item: req.body, message: error }
         };
     } finally {
         context.done();
