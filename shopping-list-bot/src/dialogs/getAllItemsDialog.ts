@@ -34,15 +34,21 @@ export class GetAllItemsDialog extends CancelAndHelpDialog {
                 const emptyShoppingList = 'Your shopping list is empty. To add an item say something like "Add 5 bananas to my shopping list."';
                 await stepContext.context.sendActivity(emptyShoppingList, emptyShoppingList, InputHints.IgnoringInput);
             } else {
+                items.sort((first, second) => first.positionInShoppingList - second.positionInShoppingList);
                 const channelId = stepContext.context.activity.channelId;
                 if (channelId && adaptiveCardsAvailable(channelId)) {
                     const shoppingListAdaptiveCardTemplate = new Template(ShoppingListCard);
                     const currentShoppingListPayload = shoppingListAdaptiveCardTemplate.expand({
                         $root: {
                             title: "Shopping List",
-                            items: items
+                            items: items.map(item =>  {return {
+                                itemName: item.itemName,
+                                marked: item.marked.toString(),
+                                unit: item.unit
+                            }})
                         }
                     });
+
                     const shoppingListAdaptiveCard = new AdaptiveCard();
                     shoppingListAdaptiveCard.parse(currentShoppingListPayload);
                     const itemsAdaptiveCardAttachment = CardFactory.adaptiveCard(shoppingListAdaptiveCard);

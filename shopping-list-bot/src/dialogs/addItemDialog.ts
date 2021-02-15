@@ -1,5 +1,5 @@
 import { InputHints, MessageFactory } from "botbuilder";
-import { ConfirmPrompt, DialogTurnResult, TextPrompt, WaterfallDialog, WaterfallStepContext } from "botbuilder-dialogs";
+import { DialogTurnResult, TextPrompt, WaterfallDialog, WaterfallStepContext } from "botbuilder-dialogs";
 import { IDialogResult } from "../models/dialogResult";
 import { Item } from "../models/item";
 import { Unit } from "../models/unit";
@@ -7,7 +7,6 @@ import { CancelAndHelpDialog } from "./cancelAndHelpDialog";
 import { UnitDialog } from "./unitDialog";
 
 const TEXT_PROMPT = 'addItemTextPrompt';
-const CONFIRM_PROMPT = 'addItemConfirmPrompt';
 const WATERFALL_DIALOG = 'addItemWaterfallDialog';
 const UNIT_DIALOG = 'addItemUnitDialog';
 
@@ -20,7 +19,6 @@ export class AddItemDialog extends CancelAndHelpDialog {
         super(id || 'addItemDialog');
 
         this.addDialog(new TextPrompt(TEXT_PROMPT))
-            .addDialog(new ConfirmPrompt(CONFIRM_PROMPT))
             .addDialog(new UnitDialog(UNIT_DIALOG))
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
                 this.itemNameStep.bind(this),

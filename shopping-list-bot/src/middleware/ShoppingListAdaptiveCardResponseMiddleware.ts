@@ -17,7 +17,9 @@ export class ShoppingListAdaptiveCardResponseMiddleware implements Middleware{
         const activityValue = context.activity.value;
         if (activityValue) {
             const itemsToUpdate = this.parseAdaptiveCardForMarkedItemsUpdate(activityValue);
-            await this.updateItems(context, itemsToUpdate);
+            if(itemsToUpdate) {
+                await this.updateItems(context, itemsToUpdate);
+            }
         }
 
 
@@ -68,19 +70,24 @@ export class ShoppingListAdaptiveCardResponseMiddleware implements Middleware{
     
     private parseAdaptiveCardForMarkedItemsUpdate(adaptiveCardPayload: Record<string, boolean>): Partial<Item>[]{
         const itemsToUpdate: Partial<Item>[] = [];
-        Object.keys(adaptiveCardPayload).forEach(itemIdKey => {
-            const itemMarkedValueString = adaptiveCardPayload[itemIdKey];
-            if (typeof itemMarkedValueString === 'string') {
-                const itemMarkedValue = JSON.parse(itemMarkedValueString);
-                itemsToUpdate.push(
-                    {
-                        id: itemIdKey,
-                        marked: itemMarkedValue
-                    }
-                )
-            }
-
-        });
+        try {
+            Object.keys(adaptiveCardPayload).forEach(itemIdKey => {
+                const itemMarkedValueString = adaptiveCardPayload[itemIdKey];
+                if (typeof itemMarkedValueString === 'string') {
+                    const itemMarkedValue = JSON.parse(itemMarkedValueString);
+                    itemsToUpdate.push(
+                        {
+                            id: itemIdKey,
+                            marked: itemMarkedValue
+                        }
+                    )
+                }
+    
+            });
+        } catch (error) {
+            return undefined;
+        }
+       
         return itemsToUpdate;
     }
 }

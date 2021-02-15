@@ -1,4 +1,3 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 import { config } from 'dotenv';
@@ -12,7 +11,7 @@ import * as restify from 'restify';
 
 // Import required bot services.
 // See https://aka.ms/bot-services to learn more about the different parts of a bot.
-import { BotFrameworkAdapter, ConversationState, MemoryStorage, UserState } from 'botbuilder';
+import { AutoSaveStateMiddleware, BotFrameworkAdapter, ConversationState, MemoryStorage, UserState } from 'botbuilder';
 import { LuisApplication } from 'botbuilder-ai';
 
 // The bot and its main dialog.
@@ -84,11 +83,10 @@ conversationState = new ConversationState(memoryStorage);
 userState = new UserState(memoryStorage);
 
 // If configured, pass in the FlightBookingRecognizer. (Defining it externally allows it to be mocked for tests)
-let luisRecognizer;
 const { LuisAppId, LuisAPIKey, LuisAPIHostName } = process.env;
 const luisConfig: LuisApplication = { applicationId: LuisAppId, endpointKey: LuisAPIKey, endpoint: `https://${LuisAPIHostName}` };
 
-luisRecognizer = new ShoppingListRecognizer(luisConfig);
+const luisRecognizer = new ShoppingListRecognizer(luisConfig);
 
 
 const functionService = new FunctionService(process.env.FunctionsBaseURL);
@@ -104,7 +102,7 @@ const removeAllItemsDialog = new RemoveAllItemsDialog(REMOVE_ALL_ITEMS_DIALOG);
 const dialog = new MainDialog(luisRecognizer, addItemDialog, getAllItemsDialog, markItemDialog, unmarkItemDialog, removeItemDialog, removeAllItemsDialog, functionService);
 const bot = new StartAndWelcomeBot(conversationState, userState, dialog);
 
-
+adapter.use(new AutoSaveStateMiddleware(conversationState, userState));
 adapter.use(new ShoppingListAdaptiveCardResponseMiddleware(functionService));
 
 // Create HTTP server

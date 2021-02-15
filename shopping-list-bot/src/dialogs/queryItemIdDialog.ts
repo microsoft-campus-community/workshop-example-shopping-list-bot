@@ -1,7 +1,7 @@
 import { InputHints, MessageFactory } from "botbuilder";
-import {Choice, ChoiceFactory, ChoiceFactoryOptions, ChoicePrompt, ConfirmPrompt, DialogTurnResult, TextPrompt, WaterfallDialog, WaterfallStepContext } from "botbuilder-dialogs";
+import {Choice, ChoiceFactory, ChoiceFactoryOptions, ChoicePrompt, ConfirmPrompt, DialogTurnResult, PromptOptions, TextPrompt, WaterfallDialog, WaterfallStepContext } from "botbuilder-dialogs";
 import { IDialogResult } from "../models/dialogResult";
-import { Item } from "../models/item";
+import { Item, itemAsTextMessage } from "../models/item";
 import { CancelAndHelpDialog } from "./cancelAndHelpDialog";
 
 
@@ -59,7 +59,7 @@ export class QueryItemIdDialog extends CancelAndHelpDialog {
             return await stepContext.next(itemThatCouldBeFound[0].id);
         } else {
             // We do not have proficient information to find the item in the list
-            let itemChoices;
+            let itemChoices: Choice[];
             if(itemThatCouldBeFound.length === 0) {
                 itemChoices = input.itemsInList.map<Choice>(this.constructItemChoice);
             } else {
@@ -68,18 +68,18 @@ export class QueryItemIdDialog extends CancelAndHelpDialog {
             console.log("itemChoice:");
             console.dir(itemChoices);
             const messageText = `${this.question} Please pick an item from your shopping list.`;
-            const message = ChoiceFactory.forChannel(stepContext.context, itemChoices, messageText, messageText );
-            return await stepContext.prompt(this.getChoicePromptId(), {prompt: message});
+            const retryMessageText = `I don't understand. Please tap, say the name or the position of an item in your shopping list.`;
+            return await stepContext.prompt(this.getChoicePromptId(), {prompt: messageText, retryPrompt: retryMessageText},itemChoices);
         }
     }
 
     private constructItemChoice(item: Item): Choice {
-       const stringRepresentation = item.toString();
+       const stringRepresentation = itemAsTextMessage(item);
        console.log("string representation: " + stringRepresentation);
         return {
             value: item.id,
             action: {
-                type: 'imBack',
+                type: 'postBack',
                 title: stringRepresentation,
                 value: item.id,
             },
@@ -102,8 +102,8 @@ export class QueryItemIdDialog extends CancelAndHelpDialog {
 */
 
     private async finalStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        const foundItemId = stepContext.result as string;
-
+        const foundItemId = (stepContext.result.value || stepContext.result) as string;
+        
 
         const result: IQueryItemIdDialogResult = {
             dialogId: this.id,

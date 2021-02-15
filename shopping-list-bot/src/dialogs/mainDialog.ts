@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { TimexProperty } from '@microsoft/recognizers-text-data-types-timex-expression';
-import { Item } from '../models/item';
+import { Item, itemAsTextMessage } from '../models/item';
 import { Unit } from '../models/unit';
 
 import { InputHints, MessageFactory, RecognizerResult, StatePropertyAccessor, TurnContext } from 'botbuilder';
@@ -265,9 +265,9 @@ export class MainDialog extends ComponentDialog {
                         console.dir(addedResult.statusText);
                         if (!addedResult.ok) {
                             //TODO more specific error to tell the user what was wrong.
-                            itemAddedMessage = `Sorry, I could not add ${itemToAdd.toString()}`;
+                            itemAddedMessage = `Sorry, I could not add ${itemAsTextMessage(itemToAdd)}`;
                         } else {
-                            itemAddedMessage = `I added ${itemToAdd.toString()} to your shopping list`;
+                            itemAddedMessage = `I added ${itemAsTextMessage(itemToAdd)} to your shopping list`;
                         }
                     }
 
@@ -291,11 +291,11 @@ export class MainDialog extends ComponentDialog {
                         const itemFromBodyMarked = patchedItemMarkResponseBody.item as Item;
                         if (!patchedItemMarkResponse.ok) {
                             if (itemFromBodyMarked) {
-                                message = `Sorry, I could not mark ${itemFromBodyMarked.toString()} as complete.`;
+                                message = `Sorry, I could not mark ${itemAsTextMessage(itemFromBodyMarked)} as complete.`;
                             }
                         } else {
                             if (itemFromBodyMarked) {
-                                message = `I've marked ${itemFromBodyMarked.toString()} as complete.`;
+                                message = `I've marked ${itemAsTextMessage(itemFromBodyMarked)} as complete.`;
                             } else {
                                 message = 'I was successful marking the item in your shopping list as complete';
                             }
@@ -328,11 +328,11 @@ export class MainDialog extends ComponentDialog {
                         const itemFromBodyUnmarked = patchedItemUnmarkResponseBody.item as Item;
                         if (!patchedItemUnmarkResponseBody.ok) {
                             if (itemFromBodyUnmarked) {
-                                unmarkMessage = `Sorry, I could not update ${itemFromBodyUnmarked.toString()} as not complete.`;
+                                unmarkMessage = `Sorry, I could not update ${itemAsTextMessage(itemFromBodyUnmarked)} as not complete.`;
                             }
                         } else {
                             if (itemFromBodyUnmarked) {
-                                unmarkMessage = `${itemFromBodyUnmarked.toString()} is now marked as not complete.`;
+                                unmarkMessage = `${itemAsTextMessage(itemFromBodyUnmarked)} is now marked as not complete.`;
                             } else {
                                 unmarkMessage = 'I was successful marking the item in your shopping list as not complete';
                             }
