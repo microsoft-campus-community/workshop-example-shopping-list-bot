@@ -1,7 +1,7 @@
 import { Channels } from "botbuilder";
 
 export const adaptiveCardsAvailable = (channelId: string) => {
-    if(channelId === Channels.Webchat || channelId === Channels.Cortana || channelId === Channels.Msteams || Channels.Emulator) {
+    if(channelId === Channels.Webchat || channelId === Channels.Cortana || channelId === Channels.Msteams || channelId ===  Channels.Emulator) {
         return true;
     }
     return false;
