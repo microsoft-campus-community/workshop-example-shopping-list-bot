@@ -10,10 +10,11 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
-    "@azure/cosmos": "^3.9.5"
+    "mongodb": "^3.6.4"
   },
   "devDependencies": {
     "@azure/functions": "^1.0.2-beta2",
+    "@types/mongodb": "^3.6.7",
     "@types/node": "^14.14.25",
     "typescript": "^3.3.3"
   }

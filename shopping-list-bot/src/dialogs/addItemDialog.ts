@@ -1,21 +1,24 @@
 import { InputHints, MessageFactory } from "botbuilder";
-import { ConfirmPrompt, DialogTurnResult, TextPrompt, WaterfallDialog, WaterfallStepContext } from "botbuilder-dialogs";
+import { DialogTurnResult, TextPrompt, WaterfallDialog, WaterfallStepContext } from "botbuilder-dialogs";
+import { IDialogResult } from "../models/dialogResult";
 import { Item } from "../models/item";
 import { Unit } from "../models/unit";
 import { CancelAndHelpDialog } from "./cancelAndHelpDialog";
 import { UnitDialog } from "./unitDialog";
 
 const TEXT_PROMPT = 'addItemTextPrompt';
-const CONFIRM_PROMPT = 'addItemConfirmPrompt';
 const WATERFALL_DIALOG = 'addItemWaterfallDialog';
 const UNIT_DIALOG = 'addItemUnitDialog';
+
+export interface IAddItemDialogResult extends IDialogResult {
+    itemToAdd: Item
+}
 
 export class AddItemDialog extends CancelAndHelpDialog {
     constructor(id: string) {
         super(id || 'addItemDialog');
 
         this.addDialog(new TextPrompt(TEXT_PROMPT))
-            .addDialog(new ConfirmPrompt(CONFIRM_PROMPT))
             .addDialog(new UnitDialog(UNIT_DIALOG))
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
                 this.itemNameStep.bind(this),
@@ -54,6 +57,11 @@ export class AddItemDialog extends CancelAndHelpDialog {
         const unit = stepContext.result as Unit;
         (stepContext.options as Item).unit = unit;
 
-        return await stepContext.endDialog(stepContext.options);
+        const result: IAddItemDialogResult = {
+            dialogId: this.id,
+            itemToAdd: stepContext.options as Item
+        }
+
+        return await stepContext.endDialog(result);
     }
 }

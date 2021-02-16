@@ -8,7 +8,7 @@
             "methods": [
                 "delete"
             ],
-            "route": "RemoveAllItems/{conversationID}"
+            "route": "RemoveAllItemsFunction/{conversationID}"
         },
         {
             "type": "http",

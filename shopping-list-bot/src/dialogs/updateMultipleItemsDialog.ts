@@ -1,6 +1,6 @@
 import { InputHints, MessageFactory } from "botbuilder";
 import { ConfirmPrompt, DialogTurnResult, TextPrompt, WaterfallDialog, WaterfallStepContext } from "botbuilder-dialogs"
-import { Item } from "../models/item";
+import { Item, itemAsTextMessage } from "../models/item";
 import { Unit } from "../models/unit";
 import { FunctionService } from "../services/functionsService";
 import { CancelAndHelpDialog } from "./cancelAndHelpDialog";
@@ -79,7 +79,7 @@ export class UpdateMultipleItemsDialog extends CancelAndHelpDialog {
         const itemToUpdate = input.itemsToUpdate[input.itemsToUpdate.length - 1];
         itemToUpdate.marked = markedValue;
         const markedText = markedValue ? 'complete' : 'incomplete';
-        const messageText = `I am going to update ${itemToUpdate.toString()} marked as ${markedText}. Do you want to update more items?`;
+        const messageText = `I am going to update ${itemToUpdate.itemName} marked as ${markedText}. Do you want to update more items?`;
         const message = MessageFactory.text(messageText, messageText, InputHints.ExpectingInput);
         return await stepContext.prompt(CONFIRM_PROMPT, { prompt: message });
     }

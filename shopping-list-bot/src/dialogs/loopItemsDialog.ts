@@ -3,7 +3,7 @@ import { Template } from "adaptivecards-templating";
 import { ActivityFactory, Attachment, AttachmentLayout, CardFactory, InputHints, MessageFactory } from "botbuilder";
 import { AttachmentPrompt, DialogTurnResult, DialogTurnStatus, WaterfallDialog, WaterfallStepContext } from "botbuilder-dialogs";
 import { adaptiveCardsAvailable } from "../helpers/adaptiveCardsAvailable";
-import { Item } from "../models/item";
+import { Item, itemAsTextMessage } from "../models/item";
 import { CancelAndHelpDialog } from "./cancelAndHelpDialog";
 
 
@@ -24,16 +24,8 @@ export class LoopItemsDialog extends CancelAndHelpDialog {
         const items = stepContext.options as Item[];
         if(items && items.length > 0) {
             const currentItemToDisplay = items.shift();
-            const markedEmoji = currentItemToDisplay.marked?  '✔️': '⭕' ;
-            let unitValue = '';
-            let unitName = '';
-            if(currentItemToDisplay.unit) {
-                unitValue = currentItemToDisplay.unit.value.toString();
-                if(currentItemToDisplay.unit.unitName) {
-                    unitName = currentItemToDisplay.unit.unitName;
-                }
-            }
-            const itemAsMessage = `${markedEmoji} ${unitValue} ${unitName} ${currentItemToDisplay.itemName}`;
+            const markedEmoji = currentItemToDisplay.marked?  '✔️': '⭕' ;    
+            const itemAsMessage = `${markedEmoji} ${itemAsTextMessage(currentItemToDisplay)}`;
             await stepContext.context.sendActivity(itemAsMessage, itemAsMessage, InputHints.IgnoringInput);
             // Repeat this dialog with the remaining items.
             return await stepContext.replaceDialog(this.id, items);

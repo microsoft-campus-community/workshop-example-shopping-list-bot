@@ -6,9 +6,10 @@
       "direction": "in",
       "name": "req",
       "methods": [
-        "get",
-        "post"
-      ]
+        "patch"
+      ],
+      "route": "UpdateItem/{conversationID}/{itemID}"
+
     },
     {
       "type": "http",

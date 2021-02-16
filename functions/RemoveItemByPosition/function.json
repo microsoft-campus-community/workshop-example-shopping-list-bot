@@ -8,7 +8,7 @@
             "methods": [
                 "delete"
             ],
-            "route": "RemoveItemByPositionFunction/{conversationID}/{positionInShoppingList}"
+            "route": "RemoveItemByIDFunction/{conversationID}/{itemID}"
         },
         {
             "type": "http",

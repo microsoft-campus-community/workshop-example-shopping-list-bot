@@ -19,23 +19,30 @@ export class FunctionService {
         return fetch(`${this.baseUrl}/GetItemsFunction/${conversationId}`);
     }
 
-    public removeItemByPosition(conversationId: string, position: number): Promise<Response> {
-        return fetch(`${this.baseUrl}/RemoveItemByPositionFunction/${conversationId}/${position}`,
+    public removeItemByID(conversationId: string, itemID: string): Promise<Response> {
+        console.dir(itemID);
+        return fetch(`${this.baseUrl}/RemoveItemByIDFunction/${conversationId}/${itemID}`,
             {
-                method: 'delete',
+                method: 'delete'
+            });
+    }
+
+    public removeAllItems(conversationID: string) {
+        return fetch(`${this.baseUrl}/RemoveAllItemsFunction/${conversationID}`,
+            {
+                method: 'delete'
             });
     }
 
     public patchItemInShoppingList(conversationId: string, itemToPatch: Partial<Item>) : Promise<Response> {
-        console.log('patch');
-        console.dir(itemToPatch);
-        if(itemToPatch.itemName || itemToPatch.marked || itemToPatch.positionInShoppingList || itemToPatch.unit) {
-            return fetch(`${this.baseUrl}/PatchItemFunction/${conversationId}`,
-            {
-                method: "patch",
-                body: JSON.stringify(itemToPatch)
-            });
+        if(itemToPatch.id) {
+            if(itemToPatch.itemName || itemToPatch.marked || itemToPatch.positionInShoppingList || itemToPatch.unit) {
+                return fetch(`${this.baseUrl}/UpdateItem/${conversationId}/${itemToPatch.id}`,
+                {
+                    method: "patch",
+                    body: JSON.stringify(itemToPatch)
+                });
+            }
         }
-
     }
 }

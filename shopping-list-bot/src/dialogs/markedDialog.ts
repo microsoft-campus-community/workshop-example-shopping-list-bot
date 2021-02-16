@@ -1,6 +1,6 @@
 import { InputHints, MessageFactory } from "botbuilder";
 import { ConfirmPrompt, DialogTurnResult, WaterfallDialog, WaterfallStepContext } from "botbuilder-dialogs";
-import { Item } from "../models/item";
+import { Item, itemAsTextMessage } from "../models/item";
 import { CancelAndHelpDialog } from "./cancelAndHelpDialog";
 
 const CONFIRM_PROMPT = 'markedConfirmPrompt';
@@ -25,12 +25,7 @@ export class MarkedDialog extends CancelAndHelpDialog {
         const item = stepContext.options as Item;
         let messageText = 'Should I mark item as complete?';
         if (item) {
-            let unitText = '';
-            if (item.unit) {
-                const unit = item.unit;
-                unitText = unit.unitName ? ` ${unit.value} ${unit.unitName}` : unit.value.toString();
-            }
-            messageText = `Should I mark${unitText} ${item.itemName} as complete?`;
+            messageText = `Should I mark ${itemAsTextMessage(item)} as complete?`;
         }
         const message = MessageFactory.text(messageText, messageText, InputHints.ExpectingInput);
         return await stepContext.prompt(CONFIRM_PROMPT, { prompt: message });
