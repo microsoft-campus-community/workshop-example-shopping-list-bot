@@ -1,74 +1,74 @@
-/**
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License.
- */
-import { ActivityTypes, ConversationState, MemoryStorage, TestAdapter, TurnContext, UserState } from 'botbuilder';
-import { Dialog, DialogSet, DialogTurnStatus } from 'botbuilder-dialogs';
-import { StartAndWelcomeBot } from '../../bots/startAndWelcomeBot';
-import { FunctionService } from '../../services/functionsService';
-const assert = require('assert');
+// /**
+//  * Copyright (c) Microsoft Corporation. All rights reserved.
+//  * Licensed under the MIT License.
+//  */
+// import { ActivityTypes, ConversationState, MemoryStorage, TestAdapter, TurnContext, UserState } from 'botbuilder';
+// import { Dialog, DialogSet, DialogTurnStatus } from 'botbuilder-dialogs';
+// import { StartAndWelcomeBot } from '../../bots/startAndWelcomeBot';
+// import { FunctionService } from '../../services/functionsService';
+// const assert = require('assert');
 
-/**
- * A simple mock for a root dialog that gets invoked by the bot.
- */
-class MockRootDialog extends Dialog {
-    constructor() {
-        super('mockRootDialog');
-    }
+// /**
+//  * A simple mock for a root dialog that gets invoked by the bot.
+//  */
+// class MockRootDialog extends Dialog {
+//     constructor() {
+//         super('mockRootDialog');
+//     }
 
-    public async beginDialog(dc, options) {
-        await dc.context.sendActivity(`${ this.id } mock invoked`);
-        return await dc.endDialog();
-    }
+//     public async beginDialog(dc, options) {
+//         await dc.context.sendActivity(`${ this.id } mock invoked`);
+//         return await dc.endDialog();
+//     }
 
-    public async run(turnContext, accessor) {
-        const dialogSet = new DialogSet(accessor);
-        dialogSet.add(this);
+//     public async run(turnContext, accessor) {
+//         const dialogSet = new DialogSet(accessor);
+//         dialogSet.add(this);
 
-        const dialogContext = await dialogSet.createContext(turnContext);
-        const results = await dialogContext.continueDialog();
-        if (results.status === DialogTurnStatus.empty) {
-            await dialogContext.beginDialog(this.id);
-        }
-    }
-}
+//         const dialogContext = await dialogSet.createContext(turnContext);
+//         const results = await dialogContext.continueDialog();
+//         if (results.status === DialogTurnStatus.empty) {
+//             await dialogContext.beginDialog(this.id);
+//         }
+//     }
+// }
 
-describe('DialogAndWelcomeBot', () => {
-    const testAdapter = new TestAdapter(async (context) => undefined);
+// describe('DialogAndWelcomeBot', () => {
+//     const testAdapter = new TestAdapter(async (context) => undefined);
 
-    async function processActivity(activity, bot) {
-        const context = new TurnContext(testAdapter, activity);
-        await bot.run(context);
-    }
+//     async function processActivity(activity, bot) {
+//         const context = new TurnContext(testAdapter, activity);
+//         await bot.run(context);
+//     }
 
-    it('Shows welcome card on member added and starts main dialog', async () => {
-        const mockRootDialog = new MockRootDialog();
-        const memoryStorage = new MemoryStorage();
-        const sut = new StartAndWelcomeBot(new ConversationState(memoryStorage), new UserState(memoryStorage), mockRootDialog);
+//     it('Shows welcome card on member added and starts main dialog', async () => {
+//         const mockRootDialog = new MockRootDialog();
+//         const memoryStorage = new MemoryStorage();
+//         const sut = new StartAndWelcomeBot(new ConversationState(memoryStorage), new UserState(memoryStorage), mockRootDialog);
 
-        // Create conversationUpdate activity
-        const conversationUpdateActivity = {
-            channelId: 'test',
-            conversation: {
-                id: 'someId'
-            },
-            membersAdded: [
-                { id: 'theUser' }
-            ],
-            recipient: { id: 'theBot' },
-            type: ActivityTypes.ConversationUpdate
-        };
+//         // Create conversationUpdate activity
+//         const conversationUpdateActivity = {
+//             channelId: 'test',
+//             conversation: {
+//                 id: 'someId'
+//             },
+//             membersAdded: [
+//                 { id: 'theUser' }
+//             ],
+//             recipient: { id: 'theBot' },
+//             type: ActivityTypes.ConversationUpdate
+//         };
 
-        // Send the conversation update activity to the bot.
-        await processActivity(conversationUpdateActivity, sut);
+//         // Send the conversation update activity to the bot.
+//         await processActivity(conversationUpdateActivity, sut);
 
-        // Assert we got the welcome card
-        let reply = testAdapter.activityBuffer.shift();
-        assert.strictEqual(reply.attachments.length, 1);
-        assert.strictEqual(reply.attachments[0].contentType, 'application/vnd.microsoft.card.adaptive');
+//         // Assert we got the welcome card
+//         let reply = testAdapter.activityBuffer.shift();
+//         assert.strictEqual(reply.attachments.length, 1);
+//         assert.strictEqual(reply.attachments[0].contentType, 'application/vnd.microsoft.card.adaptive');
 
-        // Assert that we started the main dialog.
-        reply = testAdapter.activityBuffer.shift();
-        assert.strictEqual(reply.text, 'mockRootDialog mock invoked');
-    });
-});
+//         // Assert that we started the main dialog.
+//         reply = testAdapter.activityBuffer.shift();
+//         assert.strictEqual(reply.text, 'mockRootDialog mock invoked');
+//     });
+// });
