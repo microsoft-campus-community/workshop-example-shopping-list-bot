@@ -17,8 +17,10 @@ export class StartAndWelcomeBot extends DialogBot {
             const membersAdded = context.activity.membersAdded;
             for (const member of membersAdded) {
                 if (member.id !== context.activity.recipient.id) {
-                    const welcomeCard = CardFactory.adaptiveCard(WelcomeCard);
-                    await context.sendActivity({ attachments: [welcomeCard] });
+                    const welcomeMessageText = `Hi ${member.name}, I am looking forward managing your shopping list.`;
+                    await context.sendActivity(welcomeMessageText, welcomeMessageText);
+                   // const welcomeCard = CardFactory.adaptiveCard(WelcomeCard);
+                    //await context.sendActivity({ attachments: [welcomeCard] });
                     await (dialog as MainDialog).run(context, conversationState.createProperty<DialogState>('DialogState'));
                 }
             }

@@ -44,7 +44,8 @@ export class GetAllItemsDialog extends CancelAndHelpDialog {
                             items: items.map(item =>  {return {
                                 itemName: item.itemName,
                                 marked: item.marked.toString(),
-                                unit: item.unit
+                                unit: item.unit, 
+                                id: item.id
                             }})
                         }
                     });

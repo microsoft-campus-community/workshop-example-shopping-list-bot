@@ -276,8 +276,6 @@ export class MainDialog extends ComponentDialog {
                     break;
                 case 'markItemDialog':
                     const markItemDialogResult = dialogResult as IQueryItemIdDialogResult;
-                    console.log("marked query result:");
-                    console.dir(markItemDialogResult);
                     let message = "Sorry, something went wrong trying to mark an item in your shopping list as complete.";
                     if (markItemDialogResult && markItemDialogResult.foundItemId) {
                         const patchedItemMark: Partial<Item> = {
@@ -285,20 +283,13 @@ export class MainDialog extends ComponentDialog {
                             marked: true
                         }
                         const patchedItemMarkResponse = await this.shoppingListFunctionService.patchItemInShoppingList(conversationId, patchedItemMark);
-                        const patchedItemMarkResponseBody = await patchedItemMarkResponse.json();
-                        console.log("marked funtions response:");
-                        console.dir(patchedItemMarkResponseBody);
-                        const itemFromBodyMarked = patchedItemMarkResponseBody.item as Item;
                         if (!patchedItemMarkResponse.ok) {
-                            if (itemFromBodyMarked) {
-                                message = `Sorry, I could not mark ${itemAsTextMessage(itemFromBodyMarked)} as complete.`;
-                            }
+
+                            message = `Sorry, I could not mark the item as complete.`;
+
                         } else {
-                            if (itemFromBodyMarked) {
-                                message = `I've marked ${itemAsTextMessage(itemFromBodyMarked)} as complete.`;
-                            } else {
-                                message = 'I was successful marking the item in your shopping list as complete';
-                            }
+                            message = 'I was successful marking the item in your shopping list as complete';
+
                         }
                     }
                     await stepContext.context.sendActivity(message, message, InputHints.IgnoringInput);
@@ -324,18 +315,12 @@ export class MainDialog extends ComponentDialog {
                             marked: false
                         }
                         const patchedItemUnmarkResponse = await this.shoppingListFunctionService.patchItemInShoppingList(conversationId, patchedItemUnmark);
-                        const patchedItemUnmarkResponseBody = await patchedItemUnmarkResponse.json();
-                        const itemFromBodyUnmarked = patchedItemUnmarkResponseBody.item as Item;
-                        if (!patchedItemUnmarkResponseBody.ok) {
-                            if (itemFromBodyUnmarked) {
-                                unmarkMessage = `Sorry, I could not update ${itemAsTextMessage(itemFromBodyUnmarked)} as not complete.`;
-                            }
+                        if (!patchedItemUnmarkResponse.ok) {
+                                unmarkMessage = `Sorry, I could not update the item as not complete.`;
+                            
                         } else {
-                            if (itemFromBodyUnmarked) {
-                                unmarkMessage = `${itemAsTextMessage(itemFromBodyUnmarked)} is now marked as not complete.`;
-                            } else {
                                 unmarkMessage = 'I was successful marking the item in your shopping list as not complete';
-                            }
+                            
                         }
                     }
                     await stepContext.context.sendActivity(unmarkMessage, unmarkMessage, InputHints.IgnoringInput);
