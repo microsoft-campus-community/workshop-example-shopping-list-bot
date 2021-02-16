@@ -11,7 +11,7 @@ const WATERFALL_DIALOG = 'addItemWaterfallDialog';
 const UNIT_DIALOG = 'addItemUnitDialog';
 
 export interface IAddItemDialogResult extends IDialogResult {
-    itemToAdd: Item
+    itemToAdd: Item;
 }
 
 export class AddItemDialog extends CancelAndHelpDialog {
@@ -30,38 +30,17 @@ export class AddItemDialog extends CancelAndHelpDialog {
     }
 
     private async itemNameStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        const item = stepContext.options as Item;
-
-        if (!item.itemName) {
-            const messageText = 'Which item would you like to add?';
-            const message = MessageFactory.text(messageText, messageText, InputHints.ExpectingInput);
-            return await stepContext.prompt(TEXT_PROMPT, { prompt: message });
-        } else {
-            return await stepContext.next(item.itemName);
-        }
+        // TODO Implement here!
+        return null;
     }
 
     private async queryUnitStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        const entity = stepContext.result as string;
-        const item = stepContext.options as Item;
-        item.itemName = entity;
-        if (!item.unit) {
-            return await stepContext.beginDialog(UNIT_DIALOG);
-        } else {
-            return await stepContext.next((item.unit));
-        }
+        // TODO Implement here!
+        return null;
     }
 
     private async finalStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        console.log("final step add item dialog");
-        const unit = stepContext.result as Unit;
-        (stepContext.options as Item).unit = unit;
-
-        const result: IAddItemDialogResult = {
-            dialogId: this.id,
-            itemToAdd: stepContext.options as Item
-        }
-
-        return await stepContext.endDialog(result);
+        // TODO Implement here!
+        return null;
     }
 }

@@ -44,19 +44,8 @@ export class CosmosDBService {
      * @returns the item which was added.
      */
     public async addItem(item: Item): Promise<Item> {
-        if (!item || !item.itemName || item.itemName === '') {
-            throw new Error('Illegal value for item');
-        }
-        try {
-            const collection = await this.connectAndGetCollection();
-            const positionInShoppingList: number = await collection.find({ conversationID: this.conversationID }).count() + 1;
-            return (await collection.insertOne({
-                conversationID: this.conversationID,
-                item: new ItemDb(item.itemName, item.marked, positionInShoppingList, item.unit)
-            })).ops[0].item;
-        } finally {
-            await this.client.close();
-        }
+        // TODO Implement here!
+        return null;
     }
 
     /**

@@ -20,7 +20,6 @@ export class FunctionService {
     }
 
     public removeItemByID(conversationId: string, itemID: string): Promise<Response> {
-        console.dir(itemID);
         return fetch(`${this.baseUrl}/RemoveItemByIDFunction/${conversationId}/${itemID}`,
             {
                 method: 'delete'
@@ -34,14 +33,14 @@ export class FunctionService {
             });
     }
 
-    public patchItemInShoppingList(conversationId: string, itemToPatch: Partial<Item>) : Promise<Response> {
-        if(itemToPatch.id) {
-            if(itemToPatch.itemName || itemToPatch.marked || itemToPatch.positionInShoppingList || itemToPatch.unit) {
+    public patchItemInShoppingList(conversationId: string, itemToPatch: Partial<Item>): Promise<Response> {
+        if (itemToPatch.id) {
+            if (itemToPatch.itemName || itemToPatch.marked || itemToPatch.positionInShoppingList || itemToPatch.unit) {
                 return fetch(`${this.baseUrl}/UpdateItem/${conversationId}/${itemToPatch.id}`,
-                {
-                    method: "patch",
-                    body: JSON.stringify(itemToPatch)
-                });
+                    {
+                        method: "patch",
+                        body: JSON.stringify(itemToPatch)
+                    });
             }
         }
     }
