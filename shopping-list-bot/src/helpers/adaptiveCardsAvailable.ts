@@ -1,7 +1,16 @@
+import { Channels } from "botbuilder";
+
 export const adaptiveCardsAvailable = (channelId: string) => {
-    return channelId === "webchat" || channelId === "cortana" || channelId === "Microsoft Teams" || "emulator";
+    if(channelId === Channels.Webchat || channelId === Channels.Cortana || channelId === Channels.Msteams || Channels.Emulator) {
+        return true;
+    }
+    return false;
 }
 
 export const adaptiveCardsAsImageAvailable = (channelId: string) => {
-    return channelId === "twilio" || channelId === "slack" || channelId === "kik" || channelId === "GroupMe" || channelId === "Email" || adaptiveCardsAvailable(channelId);
+    if (channelId === Channels.Twilio || channelId === Channels.Slack || channelId === Channels.Kik || channelId === Channels.Groupme || channelId === Channels.Email || adaptiveCardsAvailable(channelId)) {
+        return true;
+    } else {
+        return false;
+    }
 }
