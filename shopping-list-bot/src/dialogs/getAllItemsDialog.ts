@@ -36,7 +36,8 @@ export class GetAllItemsDialog extends CancelAndHelpDialog {
             } else {
                 items.sort((first, second) => first.positionInShoppingList - second.positionInShoppingList);
                 const channelId = stepContext.context.activity.channelId;
-            
+                console.log(channelId);
+                console.log(adaptiveCardsAvailable(channelId));
                if (channelId && adaptiveCardsAvailable(channelId)) {
                     const shoppingListAdaptiveCardTemplate = new Template(ShoppingListCard);
                     const currentShoppingListPayload = shoppingListAdaptiveCardTemplate.expand({
@@ -59,7 +60,6 @@ export class GetAllItemsDialog extends CancelAndHelpDialog {
                     const shoppingListTitle = 'Here are the items on your shopping list. You can check them off by something like "Mark first item as checked"';
                     await stepContext.context.sendActivity(shoppingListTitle, shoppingListTitle, InputHints.IgnoringInput);
                     return await stepContext.beginDialog(LOOP_ITEMS_DIALOG, items);
-
                }
 
 
