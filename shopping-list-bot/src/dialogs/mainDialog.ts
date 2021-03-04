@@ -20,7 +20,7 @@ import {
     WaterfallStepContext
 } from 'botbuilder-dialogs';
 import { AddItemDialog, IAddItemDialogResult } from './addItemDialog';
-import { ShoppingListRecognizer } from './addItemRecognizer';
+import { ShoppingListRecognizer } from './shoppingListRecognizer';
 import { GetAllItemsDialog } from './getAllItemsDialog';
 import { IQueryItemIdDialogInput, IQueryItemIdDialogResult, QueryItemIdDialog } from './queryItemIdDialog';
 import { RemoveAllItemsDialog } from './removeAllItemsDialog';

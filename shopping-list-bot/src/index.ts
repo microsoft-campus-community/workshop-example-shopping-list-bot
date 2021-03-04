@@ -29,7 +29,7 @@ const REMOVE_ITEM_DIALOG = 'removeItemDialog';
 
 
 // The helper-class recognizer that calls LUIS
-import { ShoppingListRecognizer } from './dialogs/addItemRecognizer';
+import { ShoppingListRecognizer } from './dialogs/shoppingListRecognizer';
 import { GetAllItemsDialog } from './dialogs/getAllItemsDialog';
 import { QueryItemIdDialog } from './dialogs/queryItemIdDialog';
 import { RemoveAllItemsDialog } from './dialogs/removeAllItemsDialog';
