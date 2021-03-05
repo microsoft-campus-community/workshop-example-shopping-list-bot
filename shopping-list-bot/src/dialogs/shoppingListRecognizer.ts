@@ -1,5 +1,6 @@
 import { RecognizerResult, TurnContext } from 'botbuilder';
 import { LuisApplication, LuisRecognizer, LuisRecognizerOptionsV3 } from 'botbuilder-ai';
+import { Item } from '../models/item';
 import { Unit } from '../models/unit';
 
 /**
@@ -127,5 +128,22 @@ export class ShoppingListRecognizer {
         } else {
             return NaN;
         }
+    }
+
+    /**
+     * Parse the result of a shopping list API call to find out if LUIS could recognize an item by its name or based on its position in the shopping list.
+     * 
+     * Precondition: A result returned by a call to the LUIS API of the shopping list model. {@link executeLuisQuery}
+     * @param luisResult returned by the LUIS shopping list model.
+     * @returns an item obejct with a name or position in list or both depending on which entities LUIS could recognize.
+     */
+    public getItemWithNameOrPosition(luisResult: RecognizerResult) {
+        const item = new Item();
+        const itemName = this.getItemNameEntities(luisResult);
+        item.itemName = itemName;
+        if (this.hasPositionEntity(luisResult)) {
+            item.positionInShoppingList = this.getPositionEntity(luisResult);
+        }
+        return item;
     }
 }
