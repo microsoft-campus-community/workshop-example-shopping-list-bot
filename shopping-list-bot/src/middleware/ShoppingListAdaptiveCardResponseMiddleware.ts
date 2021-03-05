@@ -1,7 +1,5 @@
-import { Activity, Middleware, ResourceResponse, TurnContext } from "botbuilder";
-import { IUpdateMultipleItemsDialogInput } from "../dialogs/updateMultipleItemsDialog";
+import { Middleware, TurnContext } from "botbuilder";
 import { Item } from "../models/item";
-import { IItemUpdateResponse } from "../models/itemUpdateResponse";
 import { FunctionService } from "../services/functionsService";
 
 export class ShoppingListAdaptiveCardResponseMiddleware implements Middleware {

@@ -34,7 +34,6 @@ import { GetAllItemsDialog } from './dialogs/getAllItemsDialog';
 import { QueryItemIdDialog } from './dialogs/queryItemIdDialog';
 import { RemoveAllItemsDialog } from './dialogs/removeAllItemsDialog';
 import { FunctionService } from './services/functionsService';
-import { UpdateMultipleItemsDialog } from './dialogs/updateMultipleItemsDialog';
 import { ShoppingListAdaptiveCardResponseMiddleware } from './middleware/ShoppingListAdaptiveCardResponseMiddleware';
 
 // Create adapter.
