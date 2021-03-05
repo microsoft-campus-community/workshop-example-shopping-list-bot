@@ -1,4 +1,4 @@
-import { InputHints, MessageFactory, RecognizerResult, StatePropertyAccessor, TurnContext } from 'botbuilder';
+import { InputHints, MessageFactory, StatePropertyAccessor, TurnContext } from 'botbuilder';
 import { LuisRecognizer } from 'botbuilder-ai';
 import {
     ComponentDialog,
