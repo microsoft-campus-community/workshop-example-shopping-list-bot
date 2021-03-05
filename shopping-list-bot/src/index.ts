@@ -1,25 +1,32 @@
 // Licensed under the MIT License.
 
+// Import required bot services.
+// See https://aka.ms/bot-services to learn more about the different parts of a bot.
+import { AutoSaveStateMiddleware, BotFrameworkAdapter, ConversationState, MemoryStorage, UserState } from 'botbuilder';
+import { LuisApplication } from 'botbuilder-ai';
 import { config } from 'dotenv';
 import * as path from 'path';
+import * as restify from 'restify';
+// The bot and its main dialog.
+import { StartAndWelcomeBot } from './bots/startAndWelcomeBot';
+// The bot's booking dialog
+import { AddItemDialog } from './dialogs/addItemDialog';
+import { GetAllItemsDialog } from './dialogs/getAllItemsDialog';
+import { MainDialog } from './dialogs/mainDialog';
+import { QueryItemIdDialog } from './dialogs/queryItemIdDialog';
+import { RemoveAllItemsDialog } from './dialogs/removeAllItemsDialog';
+// The helper-class recognizer that calls LUIS
+import { ShoppingListRecognizer } from './dialogs/shoppingListRecognizer';
+import { ShoppingListAdaptiveCardResponseMiddleware } from './middleware/ShoppingListAdaptiveCardResponseMiddleware';
+import { FunctionService } from './services/functionsService';
 
 // Note: Ensure you have a .env file and include LuisAppId, LuisAPIKey and LuisAPIHostName.
 const ENV_FILE = path.join(__dirname, '..', '.env');
 config({ path: ENV_FILE });
 
-import * as restify from 'restify';
 
-// Import required bot services.
-// See https://aka.ms/bot-services to learn more about the different parts of a bot.
-import { AutoSaveStateMiddleware, BotFrameworkAdapter, ConversationState, MemoryStorage, UserState } from 'botbuilder';
-import { LuisApplication } from 'botbuilder-ai';
 
-// The bot and its main dialog.
-import {  StartAndWelcomeBot } from './bots/startAndWelcomeBot';
-import { MainDialog } from './dialogs/mainDialog';
 
-// The bot's booking dialog
-import { AddItemDialog } from './dialogs/addItemDialog';
 const ADD_ITEM_DIALOG = 'addItemDialog';
 const GET_ALL_ITEMS_DIALOG = 'getAllItemsDialog';
 const MARK_ITEM_DIALOG = 'markItemDialog';
@@ -28,13 +35,6 @@ const REMOVE_ALL_ITEMS_DIALOG = 'removeAllItemsDialog';
 const REMOVE_ITEM_DIALOG = 'removeItemDialog';
 
 
-// The helper-class recognizer that calls LUIS
-import { ShoppingListRecognizer } from './dialogs/shoppingListRecognizer';
-import { GetAllItemsDialog } from './dialogs/getAllItemsDialog';
-import { QueryItemIdDialog } from './dialogs/queryItemIdDialog';
-import { RemoveAllItemsDialog } from './dialogs/removeAllItemsDialog';
-import { FunctionService } from './services/functionsService';
-import { ShoppingListAdaptiveCardResponseMiddleware } from './middleware/ShoppingListAdaptiveCardResponseMiddleware';
 
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about adapters.
