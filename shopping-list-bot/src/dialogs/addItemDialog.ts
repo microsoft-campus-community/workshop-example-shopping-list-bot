@@ -7,7 +7,7 @@ import { CancelAndHelpDialog } from "./cancelAndHelpDialog";
 import { UnitDialog } from "./unitDialog";
 
 /**
- * Define id's for the Dialogs the AddItemDialog is using as sub-dialogs.
+ * Define id's for the Dialogs the {@link AddItemDialog} is using as sub-dialogs.
  */
 const TEXT_PROMPT = 'addItemTextPrompt';
 const WATERFALL_DIALOG = 'addItemWaterfallDialog';
