@@ -4,7 +4,6 @@ import { Unit } from "./unit";
  * Represents an item in a shopping list.
  */
 export class Item {
-    public intent: string;
     /**
      * Unique id within a shopping list.
      */
