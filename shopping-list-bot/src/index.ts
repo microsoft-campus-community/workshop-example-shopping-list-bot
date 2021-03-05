@@ -20,13 +20,13 @@ import { ShoppingListRecognizer } from './dialogs/shoppingListRecognizer';
 import { ShoppingListAdaptiveCardResponseMiddleware } from './middleware/ShoppingListAdaptiveCardResponseMiddleware';
 import { FunctionService } from './services/functionsService';
 
-// Note: Ensure you have a .env file and include LuisAppId, LuisAPIKey and LuisAPIHostName.
+// Note: Ensure you have a .env file and include LuisAppId, LuisAPIKey, LuisAPIHostName and FunctionsBaseURL.
 const ENV_FILE = path.join(__dirname, '..', '.env');
 config({ path: ENV_FILE });
 
-
-
-
+/**
+ * Define Id's for all the dialogs we are going to use.
+ */
 const ADD_ITEM_DIALOG = 'addItemDialog';
 const GET_ALL_ITEMS_DIALOG = 'getAllItemsDialog';
 const MARK_ITEM_DIALOG = 'markItemDialog';
@@ -81,27 +81,35 @@ const memoryStorage = new MemoryStorage();
 conversationState = new ConversationState(memoryStorage);
 userState = new UserState(memoryStorage);
 
-// If configured, pass in the FlightBookingRecognizer. (Defining it externally allows it to be mocked for tests)
+// If configured, pass in the ShoppingListRecognizer. (Defining it externally allows it to be mocked for tests)
 const { LuisAppId, LuisAPIKey, LuisAPIHostName } = process.env;
 const luisConfig: LuisApplication = { applicationId: LuisAppId, endpointKey: LuisAPIKey, endpoint: `https://${LuisAPIHostName}` };
 
 const luisRecognizer = new ShoppingListRecognizer(luisConfig);
 
-
+// Configure a service the bot can use to interact with the Azure Function to manipulate a shopping list.
 const functionService = new FunctionService(process.env.FunctionsBaseURL);
 
-// Create the main dialog.
+// Construct all dialogs to put together the main dialog.
 const addItemDialog = new AddItemDialog(ADD_ITEM_DIALOG);
 const getAllItemsDialog = new GetAllItemsDialog(GET_ALL_ITEMS_DIALOG);
+/**
+ * The dialogs to ask the user which item to mark, unmark or delete can be so generic that we can use the same logic for all three.
+ */
 const markItemDialog = new QueryItemIdDialog(MARK_ITEM_DIALOG, 'Which item do you want to mark?');
 const unmarkItemDialog = new QueryItemIdDialog(UNMARK_ITEM_DIALOG, 'Which item do you want to mark as not done?');
 const removeItemDialog = new QueryItemIdDialog(REMOVE_ITEM_DIALOG, 'Which item do you want to remove?');
 const removeAllItemsDialog = new RemoveAllItemsDialog(REMOVE_ALL_ITEMS_DIALOG);
 
+// Create the main dialog.
 const dialog = new MainDialog(luisRecognizer, addItemDialog, getAllItemsDialog, markItemDialog, unmarkItemDialog, removeItemDialog, removeAllItemsDialog, functionService);
 const bot = new StartAndWelcomeBot(conversationState, userState, dialog);
 
+/**
+ * We use this middleware to not save state in the bot but instead after all middleware is run. {@link https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-middleware?view=azure-bot-service-4.0#handling-state-in-middleware} 
+*/
 adapter.use(new AutoSaveStateMiddleware(conversationState, userState));
+// Own middleware to handle responses for adaptive cards.
 adapter.use(new ShoppingListAdaptiveCardResponseMiddleware(functionService));
 
 // Create HTTP server
