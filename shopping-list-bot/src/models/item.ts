@@ -17,3 +17,16 @@ export const itemAsTextMessage = (item: Item) => {
             }
             return `${unitText}${item.itemName}`;
 }
+
+
+export const findItemInList = (items: Item[], itemToFind: Partial<Item>): Item[] => {
+    if(itemToFind.id) {
+        return items.filter(item => item.id === itemToFind.id);
+    } else if(itemToFind.positionInShoppingList) {
+        return items.filter(item => item.positionInShoppingList === itemToFind.positionInShoppingList);
+    } else if(itemToFind.itemName) {
+       return  items.filter(item => item.itemName === itemToFind.itemName);
+    } else {
+        return [];
+    }
+}

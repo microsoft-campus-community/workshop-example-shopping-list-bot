@@ -1,14 +1,18 @@
-import { InputHints, MessageFactory } from "botbuilder";
-import {Choice, ChoiceFactory, ChoiceFactoryOptions, ChoicePrompt, ConfirmPrompt, DialogTurnResult, PromptOptions, TextPrompt, WaterfallDialog, WaterfallStepContext } from "botbuilder-dialogs";
+import { Choice, ChoicePrompt, DialogTurnResult, TextPrompt, WaterfallDialog, WaterfallStepContext } from "botbuilder-dialogs";
 import { IDialogResult } from "../models/dialogResult";
-import { Item, itemAsTextMessage } from "../models/item";
+import { findItemInList, Item, itemAsTextMessage } from "../models/item";
 import { CancelAndHelpDialog } from "./cancelAndHelpDialog";
 
-
+/**
+ * Define id's for the Dialogs the {@link QueryItemIdDialog} is using as sub-dialogs.
+ */
 const TEXT_PROMPT = 'queryItemIdTextPrompt';
 const WATERFALL_DIALOG = 'queryItemIdWaterfallDialog';
 const CHOICE_DIALOG = 'queryItemIdChoiceDialog';
 
+/**
+ * What the {@link QueryItemIdDialog} expects as input when it is started.
+ */
 export interface IQueryItemIdDialogInput {
     itemToFindInList: Partial<Item>,
     itemsInList: Item[]
@@ -52,7 +56,7 @@ export class QueryItemIdDialog extends CancelAndHelpDialog {
 
     private async whichItemInformationExists(stepContext: WaterfallStepContext): Promise<DialogTurnResult>{
         const input = stepContext.options as IQueryItemIdDialogInput;
-        const itemThatCouldBeFound = this.findItemInList(input.itemsInList, input.itemToFindInList);
+        const itemThatCouldBeFound = findItemInList(input.itemsInList, input.itemToFindInList);
         console.log("items that could be found:");
         console.dir(itemThatCouldBeFound);
         if(itemThatCouldBeFound.length === 1){
@@ -86,20 +90,6 @@ export class QueryItemIdDialog extends CancelAndHelpDialog {
             synonyms: [stringRepresentation, item.itemName, item.positionInShoppingList.toString()]
         };
     }
-/*
-    private async whichItemToMark(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        const item = stepContext.options as Item;
-        if (item.itemName) {
-            return await stepContext.next(item.itemName);
-        } else if ((item.positionInShoppingList && item.positionInShoppingList > 0)) {
-            return await stepContext.next(item.positionInShoppingList);
-        } else {
-            const messageText = this.question;
-            const message = MessageFactory.text(messageText, messageText, InputHints.ExpectingInput);
-            return await stepContext.prompt(this.getTextPromptId(), { prompt: message });
-        }
-    }
-*/
 
     private async finalStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const foundItemId = (stepContext.result.value || stepContext.result) as string;
@@ -110,31 +100,7 @@ export class QueryItemIdDialog extends CancelAndHelpDialog {
             foundItemId: foundItemId
         }
         return await stepContext.endDialog(result);
-       /* const inputItem = stepContext.result as string;
-        const positionOfItem = parseInt(inputItem);
-        const item = new Item();
-        //TODO call function to mark item
-        if (isNaN(positionOfItem)) {
-            item.itemName = inputItem;
-        } else {
-            item.positionInShoppingList = positionOfItem;
-        }
-        console.log("[DEBUG] query item dialog completed with:");
-        console.dir(item);
-
-        return await stepContext.endDialog(item);
-*/
     }
 
-    private findItemInList(items: Item[], itemToFind: Partial<Item>): Item[] {
-        if(itemToFind.id) {
-            return items.filter(item => item.id === itemToFind.id);
-        } else if(itemToFind.positionInShoppingList) {
-            return items.filter(item => item.positionInShoppingList === itemToFind.positionInShoppingList);
-        } else if(itemToFind.itemName) {
-           return  items.filter(item => item.itemName === itemToFind.itemName);
-        } else {
-            return [];
-        }
-    }
+   
 }
