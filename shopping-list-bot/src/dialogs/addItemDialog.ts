@@ -76,6 +76,7 @@ export class AddItemDialog extends CancelAndHelpDialog {
      * Ask the user for the unit (i.e. 1 kg) of the item.
      * 
      * Precondition: Need name of the item to construct as input.
+     * 
      * Postcondition: Passes the unit to the next step in the waterfall.
      * @param stepContext current context/state of the conversation.
      * @param stepContext.options allows to pass a partial {@link Item}. If the item contains a unit the user is not asked to provide one and instead the next step is run. Stores the item name from the previous step in this item object.
@@ -98,6 +99,7 @@ export class AddItemDialog extends CancelAndHelpDialog {
      * Construct the item the user wants to add and end this dialog.
      * 
      * Precondition: Need unit of the item to construct as input. Unit can be undefined.
+     * 
      * Postcondition: Ends this dialog and returns the result of this dialog to the parent/caller dialog.
      * @param stepContext current context/state of the conversation.
      * @param stepContext.options allows to pass a partial {@link Item}. Stores the unit from the previous step in this item object.

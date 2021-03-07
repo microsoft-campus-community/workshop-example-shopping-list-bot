@@ -45,6 +45,7 @@ export class UnitDialog extends CancelAndHelpDialog {
      * Asks the chat whether or not they want to provide an {@link Unit}.
      * 
      * Precondition: Nothing
+     * 
      * Postcondition: Passes true to the next step if the chat want to provide inforamtion for an {@link Unit} and false if they do not want to.
      * @param stepContext current context/state of the conversation.
      * @returns the result of this turn of the dialog. This should not bother us as developers to much since it is handled by the bot framework.
@@ -61,6 +62,7 @@ export class UnitDialog extends CancelAndHelpDialog {
      * If chat wants to provide an {@link Unit} than start asking the chat to provide information about the {@link Unit}.
      * 
      * Precondition: Needs to get a boolean value from the previous step that indicates whether or not to start asking for the information to construct an {@link Unit}.
+     * 
      * Postcondition: Calls the next step in the waterfall or ends the dialog.
      * @param stepContext current context/state of the conversation.
      * @param stepContext.result should be a boolean to indicate whether or not the chat wants to provide information for an {@link Unit}.
@@ -80,6 +82,7 @@ export class UnitDialog extends CancelAndHelpDialog {
      * Ask the chat about the name of an {@link Unit}.
      * 
      * Precondition: Nothing.
+     * 
      * Postcondition: Passes a {@link string} which is the name of the {@link Unit} to the next step.
      * @param stepContext current context/state of the conversation.
      * @returns the result of this turn of the dialog. This should not bother us as developers to much since it is handled by the bot framework.
@@ -96,6 +99,7 @@ export class UnitDialog extends CancelAndHelpDialog {
      * Ask the chat for the value of the {@link Unit} to construct.
      * 
      * Precondition: Need to receive the name of the {@link Unit} from the previous step.
+     * 
      * Postcondition: Passes a number which should be interpreted as the value for the {@link Unit} to the next step. Stores the name of the {@link Unit} in stepContext.options.
      * @param stepContext current context/state of the conversation.
      * @param stepContext.result {@link string} which is interpreted as the name of the {@link Unit}.

@@ -5,6 +5,7 @@ import { CosmosDBService } from "../services/cosmosDBService";
  * Removes/deletes all items from a given shopping list.
  * 
  * Precondition: conversationID must not be null, undefined or an empty string.
+ * 
  * Postcondition: On success all items from teh shopping list are removed and can not be reverted.
  *                  On failure no items are removed from the shopping list and an error code and message are returned.
  * @param context passed from the Azure Functions runtime.

@@ -6,6 +6,7 @@ import { CosmosDBService } from "../services/cosmosDBService";
  * Get all items of a given shopping list.
  * 
  * Precondition: conversationID must not be null, undefined or an empty string.
+ * 
  * Postcondition: all items in the {@link conversationID}'s shopping list are retrieved. An error message and error code is returned on failure.
  * 
  * @param context passed from the Azure Functions runtime.

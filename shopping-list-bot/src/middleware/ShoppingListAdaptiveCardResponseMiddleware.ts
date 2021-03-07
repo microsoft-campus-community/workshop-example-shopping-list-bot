@@ -49,6 +49,7 @@ export class ShoppingListAdaptiveCardResponseMiddleware implements Middleware {
     /**
      * Updates given items in the shopping list corresponding to this conversation.
      * Precondition: Need a working {@link functionService}.
+     * 
      * Postcondition: Tries to update all items. If successful lets the chat know. If an error occursit will try to update the remaining items and the previous item updates are not rolled back, but lets chat know that some items could not be updated.
      * @param context current context/state of the conversation.
      * @param itemsToUpdate 

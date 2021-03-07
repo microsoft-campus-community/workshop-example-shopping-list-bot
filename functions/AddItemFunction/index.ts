@@ -6,6 +6,7 @@ import { CosmosDBService } from "../services/cosmosDBService";
  * Http endpoint to add an {@link Item} passed in the request to the shopping list belonging to a certain conversationID.
  * 
  * Precondition: Item and item's name must not be undefined and item's name must not be an empty string. ConversationID must not be undefined or an empty string.
+ *
  * Postcondition: The given item is added to the shopping list with last position in shopping list and the added item is returned. An error message is returned if adding the item failed.
  * 
  * @param context passed from the Azure Functions runtime.

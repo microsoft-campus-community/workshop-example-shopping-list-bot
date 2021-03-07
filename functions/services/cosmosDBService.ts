@@ -20,6 +20,7 @@ export class CosmosDBService {
      * Initializes a Mongo Client within the CosmosDBService.
      *
      * Precondition: conversation id must not be undefinied or emptry string and environment variable must contain valid credentials for CosmosDB.
+     * 
      * Postcondition: Sets the conversation id and initializes a Mongo client for given CosmosDB credentials (using MongoDB API) or throws an error.
      * @param conversationID the id of the chat conversation set by the chat bot.
      */
@@ -38,6 +39,7 @@ export class CosmosDBService {
      * Sets the increases the number by one and sets it as position in shopping list for the item to be added.
      *
      * Precondition: Item and item's name must not be undefined and item's name must not be an empty string.
+     * 
      * Postcondition: The given item is added to the shopping list with last position in shopping list and the added item is returned.
      *      An error is thrown if an DB API call failed.
      * @param item the item to be added.
@@ -79,7 +81,8 @@ export class CosmosDBService {
     /**
      * Updates the given parts of an item in the shopping list identified by its unique id.
      *
-     * Precondition: itemId and itemToUpdate must not be undefinied and itemId must not be an empty string.
+     * Precondition: itemId and itemToUpdate must not be undefined and itemId must not be an empty string.
+     * 
      * Postcondition: Updates the given members of the identified item.
      *      An error is thrown if the DB API call failed.
      * @param itemId unique id of the item to be updated.
@@ -114,6 +117,7 @@ export class CosmosDBService {
      * Updates decreases the position in shopping list for all items of the same conversation which position is greater than the deleted one.
      *
      * Precondition: itemId must not be undefined or empty string.
+     * 
      * Postcondition: the item with given id is removed and the positions of the items with greater position are decreased by one.
      *      An error is thrown if the DB API call failed.
      * @param itemId the unique identifier of the item to be removed from the shopping list.

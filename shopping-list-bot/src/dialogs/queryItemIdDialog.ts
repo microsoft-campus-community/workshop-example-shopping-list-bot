@@ -97,6 +97,7 @@ export class QueryItemIdDialog extends CancelAndHelpDialog {
      * If more information about which item to select from the chat is needed the bot asks for it.
      * 
      * Precondition: Need to receive input as defined with {@link IQueryItemIdDialogInput}.
+     * 
      * Postcondition: The next step will receive the id of the item the chat wants to select through stepContext.result.value or stepContext.result.
      * @param stepContext current context/state of the conversation.
      * @param stepContext.options {@see IQueryItemIdDialogInput}. May not be undefined or null.
@@ -156,6 +157,7 @@ export class QueryItemIdDialog extends CancelAndHelpDialog {
      * Ends this dialog and returns the result of selecting one item from a list items to the parent / caller dialog {@see IQueryItemIdDialogResult}.
      * 
      * Precondition: The previous step should pass the id of the item the chat selected to this step.
+     * 
      * Postcondition: Passes the id of the item that the chat wants to select to the parent dialog.
      * @param stepContext current context/state of the conversation.
      * @param stepContext.result.value should be the id of the selected item as string. Or {@link stepContext.result} needs to be provided.
