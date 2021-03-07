@@ -12,7 +12,7 @@ import { CosmosDBService } from "../services/cosmosDBService";
  *         Must not be null, undefined or an empty string. Should be passed through the route parameter of the http request. 
  * @returns status ```200``` if all items could be removed from the shopping list belonging to the given conversationID.
  *      Or http status ```404``` if the shopping list could not be found.
- *      Or http status ```400``` on invalif input.
+ *      Or http status ```400``` on invalid input.
  * 
  * [DELETE] http://<FUNCTION_URL>1/api/RemoveAllItemsFunction/{conversationID}
  */
