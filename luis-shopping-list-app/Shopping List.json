@@ -1,0 +1,3034 @@
+{
+  "luis_schema_version": "7.0.0",
+  "intents": [
+    {
+      "name": "AddItem",
+      "inherits": {
+        "domain_name": "ToDo",
+        "model_name": "AddToDo"
+      },
+      "features": []
+    },
+    {
+      "name": "GetAll",
+      "inherits": {
+        "domain_name": "ToDo",
+        "model_name": "ShowToDo"
+      },
+      "features": []
+    },
+    {
+      "name": "MarkItem",
+      "inherits": {
+        "domain_name": "ToDo",
+        "model_name": "MarkToDo"
+      },
+      "features": []
+    },
+    {
+      "name": "None",
+      "features": []
+    },
+    {
+      "name": "RemoveAll",
+      "features": []
+    },
+    {
+      "name": "RemoveItem",
+      "inherits": {
+        "domain_name": "ToDo",
+        "model_name": "DeleteToDo"
+      },
+      "features": []
+    },
+    {
+      "name": "UnmarkItem",
+      "features": []
+    }
+  ],
+  "entities": [
+    {
+      "name": "ItemName",
+      "children": [],
+      "inherits": {
+        "domain_name": "ToDo",
+        "model_name": "TaskContent"
+      },
+      "roles": [],
+      "features": []
+    }
+  ],
+  "hierarchicals": [],
+  "composites": [],
+  "closedLists": [
+    {
+      "name": "UnitName",
+      "subLists": [
+        {
+          "canonicalForm": "gram",
+          "list": [
+            "grams",
+            "g"
+          ]
+        },
+        {
+          "canonicalForm": "kilogram",
+          "list": [
+            "kilograms",
+            "kg"
+          ]
+        },
+        {
+          "canonicalForm": "milligram",
+          "list": [
+            "milligrams",
+            "mg"
+          ]
+        },
+        {
+          "canonicalForm": "ounce",
+          "list": [
+            "ounces"
+          ]
+        },
+        {
+          "canonicalForm": "pound",
+          "list": [
+            "pounds"
+          ]
+        },
+        {
+          "canonicalForm": "gallon",
+          "list": [
+            "gallons"
+          ]
+        },
+        {
+          "canonicalForm": "liter",
+          "list": [
+            "liters",
+            "l"
+          ]
+        },
+        {
+          "canonicalForm": "milliliter",
+          "list": [
+            "milliliters",
+            "ml"
+          ]
+        }
+      ],
+      "roles": []
+    }
+  ],
+  "prebuiltEntities": [
+    {
+      "name": "number",
+      "roles": []
+    },
+    {
+      "name": "ordinal",
+      "roles": []
+    }
+  ],
+  "utterances": [
+    {
+      "text": "7 people for that japanese sushi restaurant",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "abandon the mexican restaurant reservation",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "access my shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "access my to do list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "access the groceries list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "add 4 bananas",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 6,
+          "endPos": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add 500 grams of red lentils to my grocery list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 17,
+          "endPos": 27,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add 500 grams spinach",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 14,
+          "endPos": 20,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add 500g apples",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 9,
+          "endPos": 14,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add 500g spinach to my shopping list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 9,
+          "endPos": 15,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a few items to the grocery list",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add a grocery item to buy fish",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 22,
+          "endPos": 29,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a grocery item to buy fruit and vegetables",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 22,
+          "endPos": 45,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a grocery item to buy vegetables",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 22,
+          "endPos": 35,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a new shopping list",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add a shopping item to buy dancing dresses",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 23,
+          "endPos": 41,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a shopping item to buy orange juice",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 23,
+          "endPos": 38,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a task for anna west to bring my swimsuit for my vacation",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 15,
+          "endPos": 60,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a task for jimmy to play xbox games with me after work",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 15,
+          "endPos": 57,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a task for li lei to bring my coat from home",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 15,
+          "endPos": 47,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a task for raghu to bring my chocolates from germany",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 15,
+          "endPos": 55,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a task of chores to do around the house",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 14,
+          "endPos": 42,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a task to finish driving test this week",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 14,
+          "endPos": 42,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a task to pick mary up after work",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 14,
+          "endPos": 36,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a task to purchase fruit and vegetables",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 14,
+          "endPos": 42,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a task to shop at gnc after work",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 14,
+          "endPos": 35,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a to do to buy shoes",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 15,
+          "endPos": 23,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a to do to purchase a nice sweater",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 15,
+          "endPos": 37,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add a todo item to vacuum by october 3rd",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 16,
+          "endPos": 39,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add action item for khalifa to pack my school supplies in my list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 20,
+          "endPos": 53,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add an item to buy some snacks",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 15,
+          "endPos": 29,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add bronwnies to the grocery list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add buy gum",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 10,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add buy milk to my shopping list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 11,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add call my mother to my todo list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 17,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add four packages breakfast cereal",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 18,
+          "endPos": 33,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add go running to my to dos",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 13,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add go to whole foods in my to do list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 20,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add grocery add spinach my groceries list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 16,
+          "endPos": 22,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add grocery items cream cheese and raisin to the list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 18,
+          "endPos": 40,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add grocery items dinners and storage bag to the shopping list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 18,
+          "endPos": 40,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add have a haircut to my tasks",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 17,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add items as i speak",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add juicer groceries list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 9,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add melon and sugars and brown sugar to shopping list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 35,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add more to grocery list",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add peanuts the grocery list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 10,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add purchase a cinema ticket to my list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 27,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add purchasing food and drinks to my shopping list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 29,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add reading to my to do list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 10,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add shoes to the shopping lists",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 8,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add some items to that shopping notes",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add some items to the grocery list",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add some jeans on our shopping lists",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 9,
+          "endPos": 13,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add something in this grocery list",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add something to my list",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add tapioca starch on my shopping list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 17,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add tapioca starch on our shopping list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 17,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add task to buy a coat",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 12,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add task to set up dining room table",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 12,
+          "endPos": 35,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add this on our shopping list",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add this stuff on my shopping list",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add this thing in to do list",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add to my grocery list",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add to my to do list pick up clothes",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 21,
+          "endPos": 35,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add to my to do list print papers for 10 copies this afternoon",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 21,
+          "endPos": 61,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add to my todos list mail the insurance forms out by saturday",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 21,
+          "endPos": 60,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "add to note shopping list",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add to shopping list",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "add to the grocery note buy milk",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 24,
+          "endPos": 31,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "all have been done",
+      "intent": "MarkItem",
+      "entities": []
+    },
+    {
+      "text": "all have been purchased in the shopping list",
+      "intent": "MarkItem",
+      "entities": []
+    },
+    {
+      "text": "all shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "already complete the shopping items in the list",
+      "intent": "MarkItem",
+      "entities": []
+    },
+    {
+      "text": "append a summer reading in my list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 9,
+          "endPos": 22,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "append an task of guest to invite at the party",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 18,
+          "endPos": 45,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "append this item onto my notes",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "ask a task for kim to bring my coat from home",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 15,
+          "endPos": 44,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "book a chinese restaurant",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "book a restaurant with ramen",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "book a table for ten at a nice italian restaurant in san francisco",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "book a table for two for a chinese restaurant in los angeles",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "book me a table for six of a mexican restaurant in san francisco",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "book me an indian restaurant for tomorrow night",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "book reservations for a closest colombian restaurant with romantic atmosphese",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "bring up everything on my shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "bring up grocery notes",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "bring up shopping note",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "browse my groceries",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "buy 5 liters orange juice",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 13,
+          "endPos": 24,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "buy 500 grams of bananas",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 17,
+          "endPos": 23,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "can i add shirts on the todos list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 10,
+          "endPos": 15,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "can i put on caramel cheese popcorn on my grocery list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 13,
+          "endPos": 34,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "can you delete abc item",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 15,
+          "endPos": 17,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "can you delete todo1",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 15,
+          "endPos": 19,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "can you help me to order a table in a chinese restaurant at redmond",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "can you help to remove all tasks",
+      "intent": "RemoveAll",
+      "entities": []
+    },
+    {
+      "text": "can you reserve a sushi bar for me",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "can you show my to do list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "cancel apples from shopping list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 7,
+          "endPos": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "cancel zucca, make for sushi restaurant same time, 4 guests",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "change reservation 9:00 at tokyo reataurant a table for 5",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "check my task list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "check my to do list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "check off apples from list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 10,
+          "endPos": 15,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "check off bananas from my grocery list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 10,
+          "endPos": 16,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "check off garbage from grocery list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 10,
+          "endPos": 16,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "check off meet john at 8 am from to do list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 10,
+          "endPos": 26,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "check off shampoo from shopping list as done",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 10,
+          "endPos": 16,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "check the box shampoo in my shopping list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 14,
+          "endPos": 20,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "clear everything",
+      "intent": "RemoveAll",
+      "entities": []
+    },
+    {
+      "text": "clear my shopping list",
+      "intent": "RemoveAll",
+      "entities": []
+    },
+    {
+      "text": "complete all",
+      "intent": "MarkItem",
+      "entities": []
+    },
+    {
+      "text": "complete pick up black shoes in my to-do list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 9,
+          "endPos": 27,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "complete task go shopping",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 14,
+          "endPos": 24,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "could i add medicine to the todos list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 12,
+          "endPos": 19,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "create a task to meet my friends",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 17,
+          "endPos": 31,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "create task to cyber shop on nov. 11",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 15,
+          "endPos": 35,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "create task to go to the mall",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 15,
+          "endPos": 28,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "create task to meet john after 5:00 p.m.",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 15,
+          "endPos": 39,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "create to do to go running in the park",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 16,
+          "endPos": 37,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "create to do to read a book tonight",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 18,
+          "endPos": 34,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "cross bananas off my shopping list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 6,
+          "endPos": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete all",
+      "intent": "RemoveAll",
+      "entities": []
+    },
+    {
+      "text": "delete all items",
+      "intent": "RemoveAll",
+      "entities": []
+    },
+    {
+      "text": "delete eggs from list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 7,
+          "endPos": 10,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete everything",
+      "intent": "RemoveAll",
+      "entities": []
+    },
+    {
+      "text": "delete everything from my shopping list",
+      "intent": "RemoveAll",
+      "entities": []
+    },
+    {
+      "text": "delete off pancake mix on the shopping list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 11,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete shampoo from shopping list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 7,
+          "endPos": 13,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete shirts from list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 7,
+          "endPos": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete task go fishing",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 12,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete task go to cinema tonight",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 12,
+          "endPos": 31,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete the item buy socks from my to-do list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 16,
+          "endPos": 24,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete the second task in my shopping list",
+      "intent": "RemoveItem",
+      "entities": []
+    },
+    {
+      "text": "delete the task house cleanup this weekend",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 16,
+          "endPos": 41,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete the task to hit the gym every morning",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 19,
+          "endPos": 43,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete the to do meet my friends tomorrow",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 17,
+          "endPos": 40,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete the to do to meet john when he come here the next friday",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 20,
+          "endPos": 62,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete the to do to practice piano daily",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 20,
+          "endPos": 39,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete to do buy milk",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 13,
+          "endPos": 20,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete to do go shopping",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 13,
+          "endPos": 23,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "delete to do that go hiking tomorrow",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 18,
+          "endPos": 35,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "display all notes from last month",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "display groceries list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "display notes with groceries",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "display shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "display tasks note",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "display todo list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "do i have a list called grocery list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "do i have any lists",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "done with the task abc in our shopping list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 19,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "done with the task shopping",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 19,
+          "endPos": 26,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "done with the task tapioca starch in our shopping list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 19,
+          "endPos": 32,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "erase bananas from shopping list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 6,
+          "endPos": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "erase peanuts on the shopping list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 6,
+          "endPos": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "find list about shopping",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "find my grocery items i saved on saturday",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "find my shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "find note labeled grocery",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "find notes called grocery",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "find notes for grocery shopping",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "find notes with groceries",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "find shopping",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "find task list on shopping",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "find the list i create for shopping",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "find the to do list for me",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "finish hikes on my to do list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 7,
+          "endPos": 11,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "finish peanuts on the shopping list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 7,
+          "endPos": 13,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "get green beans",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 14,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "get work items on my todo list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "go ahead with the reservation for three tomorrow at sushi restaurant",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "help access my personal list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "help show my to do list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "i definitely want to book the chinese restaurant",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "i have finished the interview which is the last task in my to do list",
+      "intent": "MarkItem",
+      "entities": []
+    },
+    {
+      "text": "i have to see my tasks",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "i have to see the grocery list i created today",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "i need one liter milk",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 17,
+          "endPos": 20,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i want to check my shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "i want to reserve a restaurant to eat noodles",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "i want to see grocery list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "is there anything on my to do list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "i've changed my mind. don't reserve that steak house.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "let me check off the groceries list",
+      "intent": "MarkItem",
+      "entities": []
+    },
+    {
+      "text": "list grocery notes",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "look at my grocery list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "make a reservation at a sushi restaurant",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "make a reservation at the japanese restaurant",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "make a reservation for steak eight o'clock",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "mark buy fish as completed",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 9,
+          "endPos": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark fish as complete",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 8,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark happy on to dos list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 9,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark lemons and onions in grocery list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark pancake mix on my grocery shopping list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 15,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark peanuts on my grocery list as done",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 11,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark peanuts on my grocery shopping list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 11,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark pick mary up as finished",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 16,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark pick up milk on my to-do list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 13,
+          "endPos": 16,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark play badminton with tom as finished",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 27,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark salad on my grocery shopping list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 9,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark salad on the groceries list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 9,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark task buy a bottle of vinegar as finished",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 10,
+          "endPos": 32,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark task go running as finished",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 10,
+          "endPos": 19,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark task read a book as done",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 10,
+          "endPos": 20,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark the first task as completed",
+      "intent": "MarkItem",
+      "entities": []
+    },
+    {
+      "text": "mark the item garbage from grocery list",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 14,
+          "endPos": 20,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark the task buy milk as done",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 18,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark the task get some food as complete",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 14,
+          "endPos": 26,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark the task go shopping as finished",
+      "intent": "MarkItem",
+      "entities": []
+    },
+    {
+      "text": "mark the task reserve a restaurant for tomorrow's dinner as finished",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 14,
+          "endPos": 55,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "mark the task visit my grandma as completed",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 14,
+          "endPos": 29,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "need go to library this week, add this todo item",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 0,
+          "endPos": 27,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "no need to buy milk in grocery list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 11,
+          "endPos": 18,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "omit the milk in the grocery list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 9,
+          "endPos": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "please add two cans of chopped tomatoes",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 23,
+          "endPos": 38,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "provide me the direction to the booked chinese restaurant",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "pull grocery list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "pull up grocery list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "pull up my grocery list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "pull up my notes",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "pull up to do list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "put cheese on list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 9,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "put ham on my shopping list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 6,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "put hikes on my to do list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 8,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "put ice cream on the groceries list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "put milk on my grocery list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 7,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "put on caramel cheese popcorn on my grocery shopping list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 4,
+          "endPos": 28,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "read aloud my grocery list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "read out my tasks",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "reject the chinese restaurant reservation",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "reject the italian restaurant reservation",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "remind me to attend the meeting tomorrow",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 13,
+          "endPos": 39,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remind me to buy 2 avocados",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 19,
+          "endPos": 26,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remind me to buy first aid creams and berries",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 13,
+          "endPos": 44,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remind me to buy milk",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 13,
+          "endPos": 20,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remind me to get 1 liter apple juice",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 25,
+          "endPos": 35,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remind me to get 500 grams of apples",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 30,
+          "endPos": 35,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remind me to get a liter cooking oil",
+      "intent": "AddItem",
+      "entities": []
+    },
+    {
+      "text": "remind me to meet my teacher",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 13,
+          "endPos": 27,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remind me to shop for a new carpet",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 22,
+          "endPos": 33,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove all",
+      "intent": "RemoveItem",
+      "entities": []
+    },
+    {
+      "text": "remove all items",
+      "intent": "RemoveAll",
+      "entities": []
+    },
+    {
+      "text": "remove all my items",
+      "intent": "RemoveAll",
+      "entities": []
+    },
+    {
+      "text": "remove all tasks",
+      "intent": "RemoveItem",
+      "entities": []
+    },
+    {
+      "text": "remove all todo items tomorrow",
+      "intent": "RemoveItem",
+      "entities": []
+    },
+    {
+      "text": "remove asprin from shopping list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 7,
+          "endPos": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove black shoes from shopping list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 7,
+          "endPos": 17,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove class from todo list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 7,
+          "endPos": 11,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove everything",
+      "intent": "RemoveAll",
+      "entities": []
+    },
+    {
+      "text": "remove salad vegetables from grocery list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 7,
+          "endPos": 22,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove task buy dog food",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 12,
+          "endPos": 23,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove task go shopping",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 12,
+          "endPos": 22,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove task go shopping with john this saturday",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 12,
+          "endPos": 46,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove task that go hiking this weekend",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 17,
+          "endPos": 38,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove task that lawn mowing",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 17,
+          "endPos": 27,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove the item paris from my list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 16,
+          "endPos": 20,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove the task that go to library after work",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 21,
+          "endPos": 44,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove the to do physical examination",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 17,
+          "endPos": 36,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove the to do that pick tom up at six p.m.",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 22,
+          "endPos": 44,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove to do go to the gym",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 13,
+          "endPos": 25,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "remove to do that go to the dentist tomorrow morning",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 18,
+          "endPos": 51,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "reserve a nice place for tacos",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "reserve a table for me in a restaurant that serves japanese cuisine",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "reserve this italian restaurant please",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "review grocery list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "set task 7 as not finished",
+      "intent": "UnmarkItem",
+      "entities": []
+    },
+    {
+      "text": "set the grocery list as finished",
+      "intent": "MarkItem",
+      "entities": []
+    },
+    {
+      "text": "set the item as finished",
+      "intent": "MarkItem",
+      "entities": []
+    },
+    {
+      "text": "shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "shopping list completed",
+      "intent": "MarkItem",
+      "entities": []
+    },
+    {
+      "text": "shopping list delete a",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 21,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "shopping list delete dog food",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 21,
+          "endPos": 28,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "shopping list delete eggs",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 21,
+          "endPos": 24,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "shopping list delete milk",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 21,
+          "endPos": 24,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "shopping list just done",
+      "intent": "MarkItem",
+      "entities": []
+    },
+    {
+      "text": "show all items",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "show all my shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "show me all tasks",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "show me everything",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "show me my shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "show my to do list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "show my to dos",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "show my todos",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "stop booking the french restaurant",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "take coffee off my groceries list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 10,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "take lemons and onions off my shopping list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "take me to my shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "take milk off grocery list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 8,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "take socks and shoes off my shopping list",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 19,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "task completed buy gum",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 19,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "task not completed buy apples",
+      "intent": "UnmarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 23,
+          "endPos": 28,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "task train has been done",
+      "intent": "MarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 5,
+          "endPos": 9,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "the 2nd task is not done",
+      "intent": "UnmarkItem",
+      "entities": []
+    },
+    {
+      "text": "the 3rd task finished",
+      "intent": "MarkItem",
+      "entities": []
+    },
+    {
+      "text": "the french restaurant i have plans for.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "time of the italian restaurant reservation",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "to grocery list add milk",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 20,
+          "endPos": 23,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "to grocery list add two kilograms of flour",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 37,
+          "endPos": 41,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "to my shopping list add paper towels",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 24,
+          "endPos": 35,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "to my vacation to do list add buy sunblock",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 30,
+          "endPos": 41,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "to the grocery list add one bottle olive oil",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 35,
+          "endPos": 43,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "todo list delete paris vacation",
+      "intent": "RemoveItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 17,
+          "endPos": 30,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "uncheck bananas in my shopping list",
+      "intent": "UnmarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 8,
+          "endPos": 14,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "uncheck item 10",
+      "intent": "UnmarkItem",
+      "entities": []
+    },
+    {
+      "text": "uncheck item 7 of my shopping list",
+      "intent": "UnmarkItem",
+      "entities": []
+    },
+    {
+      "text": "unmark 5th item in my shopping list",
+      "intent": "UnmarkItem",
+      "entities": []
+    },
+    {
+      "text": "unmark the cabbage from my grocery list",
+      "intent": "UnmarkItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 11,
+          "endPos": 17,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "view my grocery list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "view shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "what about grocery list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "what am i going to do next",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "what are my notes for the grocery store",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "what are my tasks for todo",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "what do i have to buy on the shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "what do i need to buy in the shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "what is on my shopping list",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "what is the last task on my to do list for tomorow",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "what is the time of my reservation at jean georges, the french cuisine restaurant",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "what time is reservation for kuo yuan, the noodle restaurant",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "where is the grocery shopping notes i worked on last night",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "where is the noodle restaurant i'm going to 6:30",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "where is the sushi restaurant where i have reservations?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "would you add heavy cream to the todos list",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 14,
+          "endPos": 24,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "would you bring up my new grocery notes",
+      "intent": "GetAll",
+      "entities": []
+    },
+    {
+      "text": "would you please add todo item of all hands meeting next monday",
+      "intent": "AddItem",
+      "entities": [
+        {
+          "entity": "ItemName",
+          "startPos": 34,
+          "endPos": 62,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "yes, make the reservation for tomorrow at french restaurant for 4",
+      "intent": "None",
+      "entities": []
+    }
+  ],
+  "versionId": "0.1",
+  "name": "Shopping List",
+  "desc": "Understand commands to add items to a shopping list.",
+  "culture": "en-us",
+  "tokenizerVersion": "1.0.0",
+  "patternAnyEntities": [
+    {
+      "name": "ItemName.Any",
+      "inherits": {
+        "domain_name": "ToDo",
+        "model_name": "TaskContent.Any"
+      },
+      "roles": [],
+      "explicitList": []
+    }
+  ],
+  "regex_entities": [],
+  "phraselists": [],
+  "regex_features": [],
+  "patterns": [
+    {
+      "pattern": "^(what|anything)[do] i (need|should|have to) (buy|shop|purchase) for {ItemName}",
+      "intent": "GetAll"
+    },
+    {
+      "pattern": "^[task][(done|finished|completed)]{ItemName},[please][(check off|mark it)][as][(done|finished|complete)]",
+      "intent": "MarkItem"
+    },
+    {
+      "pattern": "^[(can you|could you|would you)] [please] (put|add|append) {ItemName} [and] [{ItemName}] (on|to)[my][(to do|todos|todo)]list",
+      "intent": "AddItem"
+    },
+    {
+      "pattern": "^[(can you|could you|would you)] [please] (put|add|append) {number}{UnitName} {ItemName} (on|to)[my][(to do|todos|todo)]list",
+      "intent": "AddItem"
+    }
+  ],
+  "settings": []
+}
