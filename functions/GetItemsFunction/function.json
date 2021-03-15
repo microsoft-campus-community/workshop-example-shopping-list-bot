@@ -8,7 +8,7 @@
             "methods": [
                 "get"
             ],
-            "route": "GetItemsFunction/{conversationID}"
+            "route": "GetItemsFunction/{shoppingListID}"
         },
         {
             "type": "http",
