@@ -16,5 +16,5 @@
             "name": "res"
         }
     ],
-    "scriptFile": "../dist/RemoveItemByPosition/index.js"
+    "scriptFile": "../dist/RemoveItemById/index.js"
 }
