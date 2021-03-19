@@ -40,7 +40,7 @@ jobs:
       uses: Azure/functions-action@v1
       id: fa
       with:
-        app-name: 'shopping-list-functions'
+        app-name: 'workshop-shopping-list'
         slot-name: 'production'
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_656b940b97ad482e89947253b659ce0b }}

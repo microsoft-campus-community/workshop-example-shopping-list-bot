@@ -8,11 +8,10 @@
             "text": "${title}"
         },
         {
-            
             "$data": "${items}",
             "id": "${id}",
             "type": "Input.Toggle",
-            "title": "${if(unit.value, unit.value, '')} ${if(unit.unitName, unit.unitName, '')}  ${itemName}",
+            "title": "${if(unit.value, unit.value, '')} ${if(unit.value && unit.unitName, unit.unitName, '')}  ${itemName}",
             "value": "${marked}"
         }
     ],

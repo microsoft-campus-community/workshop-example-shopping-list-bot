@@ -8,7 +8,7 @@
             "methods": [
                 "delete"
             ],
-            "route": "RemoveItemByIDFunction/{conversationID}/{itemID}"
+            "route": "RemoveItemByIDFunction/{shoppingListID}/{itemID}"
         },
         {
             "type": "http",
@@ -16,5 +16,5 @@
             "name": "res"
         }
     ],
-    "scriptFile": "../dist/RemoveItemByPosition/index.js"
+    "scriptFile": "../dist/RemoveItemById/index.js"
 }
