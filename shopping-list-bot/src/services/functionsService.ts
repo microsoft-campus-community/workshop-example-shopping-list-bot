@@ -72,8 +72,10 @@ export class FunctionService {
      */
     public patchItemInShoppingList(conversationId: string, itemToPatch: Partial<Item>): Promise<Response> {
         if (itemToPatch.id) {
-            if (itemToPatch.itemName || itemToPatch.marked || itemToPatch.positionInShoppingList || itemToPatch.unit) {
-                return fetch(`${this.baseUrl}/UpdateItem/${conversationId}/${itemToPatch.id}`,
+            if (itemToPatch.itemName || itemToPatch.marked !== undefined || itemToPatch.unit) {
+                const id = itemToPatch.id;
+                itemToPatch.id = undefined;
+                return fetch(`${this.baseUrl}/UpdateItem/${conversationId}/${id}`,
                     {
                         method: "patch",
                         body: JSON.stringify(itemToPatch)

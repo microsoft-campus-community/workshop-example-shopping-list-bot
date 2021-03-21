@@ -167,7 +167,7 @@ export class MainDialog extends ComponentDialog {
                 return await stepContext.beginDialog('getAllItemsDialog', allItems);
             case 'MarkItem':
                 // Parse the LUIS response to find out which item the user wants to mark as completed.
-                const itemToMark = luisResult.getItemWithNameOrPosition(luisResult);
+                const itemToMark = this.luisRecognizer.getItemWithNameOrPosition(luisResult);
 
                 // Get all items in the shopping list to present the user which item they can mark.
                 const itemsInShoppingListMarkResponse = await this.shoppingListFunctionService.getItemsInShoppingList(conversationId);
@@ -188,7 +188,7 @@ export class MainDialog extends ComponentDialog {
                 return stepContext.beginDialog('markItemDialog', markItemInput);
             case 'UnmarkItem':
                 // Parse the LUIS response to find out which item the user wants to mark as NOT completed.
-                const itemToUnmark = luisResult.getItemWithNameOrPosition(luisResult);
+                const itemToUnmark = this.luisRecognizer.getItemWithNameOrPosition(luisResult);
 
                 // Get all items in the shopping list to present the user which item they can mark.
                 const itemsInShoppingListUnmarkResponse = await this.shoppingListFunctionService.getItemsInShoppingList(conversationId);
@@ -218,7 +218,7 @@ export class MainDialog extends ComponentDialog {
                 return await stepContext.beginDialog('removeAllItemsDialog');
             case 'RemoveItem':
                 // Find out which item the user wants to remove by parsing the LUIS response.
-                const itemToRemove = luisResult.getItemWithNameOrPosition(luisResult);
+                const itemToRemove = this.luisRecognizer.getItemWithNameOrPosition(luisResult);
 
                 // Get all items in the shopping list to present the user which item they can remove.
                 const itemsInShoppingListRemoveResponse = await this.shoppingListFunctionService.getItemsInShoppingList(conversationId);
