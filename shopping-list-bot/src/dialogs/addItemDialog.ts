@@ -21,7 +21,7 @@ export interface IAddItemDialogResult extends IDialogResult {
     /**
      * The item the user wants to add based on what the AddItemDialog could find out.
      */
-    itemToAdd: Item
+    itemToAdd: Item;
 }
 
 /**
@@ -31,9 +31,9 @@ export interface IAddItemDialogResult extends IDialogResult {
 export class AddItemDialog extends CancelAndHelpDialog {
 
     /**
-     * 
+     *
      * @param {string} [id=addItemDialog] unique id in the dialog set this dialog is added to to reference this instance of {@link AddItemDialog}.
-     *  
+     *
      */
     constructor(id: string = 'addItemDialog') {
         super(id);
@@ -53,7 +53,7 @@ export class AddItemDialog extends CancelAndHelpDialog {
 
     /**
      * Asks the user the name of the item they want to add.
-     * 
+     *
      * Postcondition: Passes the name the user entered to the next step in the waterfall.
      * @param stepContext current context/state of the conversation.
      * @param stepContext.options allows to pass a partial {@link Item}. If the item contains a new the user is not asked to provide one and instead the next step is run.
@@ -72,7 +72,7 @@ export class AddItemDialog extends CancelAndHelpDialog {
 
     /**
      * Ask the user for the unit (i.e. 1 kg) of the item.
-     * 
+     *
      * Precondition: Need name of the item to construct as input.
      * Postcondition: Passes the unit to the next step in the waterfall.
      * @param stepContext current context/state of the conversation.
@@ -80,11 +80,11 @@ export class AddItemDialog extends CancelAndHelpDialog {
      * @param stepContext.result result of the previous step in the waterfall dialog. Needs to be name of the item the user wants to add as {@link string}.
      */
     private async queryUnitStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        const entity = stepContext.result as string;
+        const itemNameResult = stepContext.result as string;
         const item = stepContext.options as Item;
-        item.itemName = entity;
+        item.itemName = itemNameResult;
         if (!item.unit) {
-            // pushes the unit dialog to querry for an unit and continues here when the unit dialog is completed.
+            // pushes the unit dialog to query for a unit and continues here when the unit dialog is completed.
             return await stepContext.beginDialog(UNIT_DIALOG);
         } else {
             return await stepContext.next((item.unit));
@@ -93,7 +93,7 @@ export class AddItemDialog extends CancelAndHelpDialog {
 
     /**
      * Construct the item the user wants to add and end this dialog.
-     * 
+     *
      * Precondition: Need unit of the item to construct as input. Unit can be undefined.
      * Postcondition: Ends this dialog and returns the result of this dialog to the parent/caller dialog.
      * @param stepContext current context/state of the conversation.
@@ -102,12 +102,13 @@ export class AddItemDialog extends CancelAndHelpDialog {
      */
     private async finalStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const unit = stepContext.result as Unit;
-        (stepContext.options as Item).unit = unit;
+        const item = stepContext.options as Item;
+        item.unit = unit;
 
         const result: IAddItemDialogResult = {
             dialogId: this.id,
-            itemToAdd: stepContext.options as Item
-        }
+            itemToAdd: item
+        };
 
         return await stepContext.endDialog(result);
     }
