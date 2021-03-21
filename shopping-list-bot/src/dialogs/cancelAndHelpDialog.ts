@@ -13,6 +13,12 @@ export class CancelAndHelpDialog extends ComponentDialog {
         super(id);
     }
 
+    /**
+     * Callback when a user sends an activity in a bot in the context of an ongoing conversation.
+     * 
+     * Postcondition: Calls the onContinueDialog of its parent class if the user does not want to get help, cancel or quit with this message. If the activity is interpreted as a help, cancel or quit message than the parent class will not be called.
+     * @param innerDc 
+     */
     public async onContinueDialog(innerDc: DialogContext): Promise<DialogTurnResult> {
         const result = await this.interrupt(innerDc);
         if (result) {
@@ -21,10 +27,14 @@ export class CancelAndHelpDialog extends ComponentDialog {
         return await super.onContinueDialog(innerDc);
     }
 
+    /**
+     * Process the activity the user send to see if they need help, want to cancel or quit the dialog.
+     * Acts on the before mentioned commands appropriately.
+     * @param innerDc context of the dialog.
+     */
     private async interrupt(innerDc: DialogContext): Promise<DialogTurnResult | undefined> {
         if (innerDc.context.activity.text) {
             const text = innerDc.context.activity.text.toLowerCase();
-
             switch (text) {
                 case 'help':
                 case '?':

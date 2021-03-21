@@ -7,7 +7,7 @@ import { CancelAndHelpDialog } from "./cancelAndHelpDialog";
 import { UnitDialog } from "./unitDialog";
 
 /**
- * Define id's for the Dialogs the AddItemDialog is using as sub-dialogs.
+ * Define id's for the Dialogs the {@link AddItemDialog} is using as sub-dialogs.
  */
 const TEXT_PROMPT = 'addItemTextPrompt';
 const WATERFALL_DIALOG = 'addItemWaterfallDialog';
@@ -38,6 +38,7 @@ export class AddItemDialog extends CancelAndHelpDialog {
     constructor(id: string = 'addItemDialog') {
         super(id);
 
+        // add all the dialogs we need within this dialog
         this.addDialog(new TextPrompt(TEXT_PROMPT))
             .addDialog(new UnitDialog(UNIT_DIALOG))
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
@@ -57,6 +58,7 @@ export class AddItemDialog extends CancelAndHelpDialog {
      * Postcondition: Passes the name the user entered to the next step in the waterfall.
      * @param stepContext current context/state of the conversation.
      * @param stepContext.options allows to pass a partial {@link Item}. If the item contains a new the user is not asked to provide one and instead the next step is run.
+     * @returns the result of this turn of the dialog. This should not bother us as developers to much since it is handled by the bot framework.
      */
     private async itemNameStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const item = stepContext.options as Item;
@@ -74,10 +76,12 @@ export class AddItemDialog extends CancelAndHelpDialog {
      * Ask the user for the unit (i.e. 1 kg) of the item.
      *
      * Precondition: Need name of the item to construct as input.
+     * 
      * Postcondition: Passes the unit to the next step in the waterfall.
      * @param stepContext current context/state of the conversation.
      * @param stepContext.options allows to pass a partial {@link Item}. If the item contains a unit the user is not asked to provide one and instead the next step is run. Stores the item name from the previous step in this item object.
      * @param stepContext.result result of the previous step in the waterfall dialog. Needs to be name of the item the user wants to add as {@link string}.
+     * @returns the result of this turn of the dialog. This should not bother us as developers to much since it is handled by the bot framework.
      */
     private async queryUnitStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const itemNameResult = stepContext.result as string;
@@ -95,10 +99,12 @@ export class AddItemDialog extends CancelAndHelpDialog {
      * Construct the item the user wants to add and end this dialog.
      *
      * Precondition: Need unit of the item to construct as input. Unit can be undefined.
+     * 
      * Postcondition: Ends this dialog and returns the result of this dialog to the parent/caller dialog.
      * @param stepContext current context/state of the conversation.
      * @param stepContext.options allows to pass a partial {@link Item}. Stores the unit from the previous step in this item object.
      * @param stepContext.result result of the previous step in the waterfall dialog. Needs to be an {@link Unit} object that the user wants this item to be or undefined.
+     * @returns the result of this turn of the dialog. This should not bother us as developers to much since it is handled by the bot framework.
      */
     private async finalStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const unit = stepContext.result as Unit;

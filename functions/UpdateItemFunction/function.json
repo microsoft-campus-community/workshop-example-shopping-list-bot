@@ -8,7 +8,7 @@
       "methods": [
         "patch"
       ],
-      "route": "UpdateItem/{conversationID}/{itemID}"
+      "route": "UpdateItem/{shoppingListID}/{itemID}"
 
     },
     {

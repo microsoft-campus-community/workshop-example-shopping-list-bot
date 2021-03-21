@@ -14,30 +14,32 @@ import { ItemDb } from "../models/itemDb";
 export class CosmosDBService {
 
     private readonly client: MongoClient;
-    private readonly conversationID: string;
+    private readonly shoppingListID: string;
 
     /**
      * Initializes a Mongo Client within the CosmosDBService.
      *
-     * Precondition: conversation id must not be undefinied or emptry string and environment variable must contain valid credentials for CosmosDB.
-     * Postcondition: Sets the conversation id and initializes a Mongo client for given CosmosDB credentials (using MongoDB API) or throws an error.
-     * @param conversationID the id of the chat conversation set by the chat bot.
+     * Precondition: shopping list id must not be undefinied or emptry string and environment variable must contain valid credentials for CosmosDB.
+     * 
+     * Postcondition: Sets the shopping list ID and initializes a Mongo client for given CosmosDB credentials (using MongoDB API) or throws an error.
+     * @param shoppingListID the id for the shopping list to work on.
      */
-    constructor(conversationID: string) {
-        if (!conversationID || conversationID === '') {
-            throw new Error('Illegal value for conversationID');
+    constructor(shoppingListID: string) {
+        if (!shoppingListID || shoppingListID === '') {
+            throw new Error('Illegal value for shoppingListID');
         }
-        this.conversationID = conversationID;
+        this.shoppingListID = shoppingListID;
         this.client = new MongoClient(process.env.SHOPPING_LIST_COSMOSDB, { useUnifiedTopology: true });
     }
 
     /**
      * Adds a new item to the shopping list.
      *
-     * Retrieves the number of items in the shopping list of the {@link conversationID}.
+     * Retrieves the number of items in the shopping list of the {@link shoppingListID}.
      * Sets the increases the number by one and sets it as position in shopping list for the item to be added.
      *
      * Precondition: Item and item's name must not be undefined and item's name must not be an empty string.
+     * 
      * Postcondition: The given item is added to the shopping list with last position in shopping list and the added item is returned.
      *      An error is thrown if an DB API call failed.
      * @param item the item to be added.
@@ -49,9 +51,9 @@ export class CosmosDBService {
         }
         try {
             const collection = await this.connectAndGetCollection();
-            const positionInShoppingList: number = await collection.find({ conversationID: this.conversationID }).count() + 1;
+            const positionInShoppingList: number = await collection.find({ shoppingListID: this.shoppingListID }).count() + 1;
             return (await collection.insertOne({
-                conversationID: this.conversationID,
+                shoppingListID: this.shoppingListID,
                 item: new ItemDb(item.itemName, item.marked, positionInShoppingList, item.unit)
             })).ops[0].item;
         } finally {
@@ -60,7 +62,7 @@ export class CosmosDBService {
     }
 
     /**
-     * Removes all items for a {@link conversationID}.
+     * Removes all items for a {@link shoppingListID}.
      *
      * Postcondition: All items for the conversation id are removed from the container.
      *      An error is thrown if the DB API call failed.
@@ -68,7 +70,7 @@ export class CosmosDBService {
     public async removeAllItems(): Promise<void> {
         try {
             const collection = await this.connectAndGetCollection();
-            await collection.deleteMany({ conversationID: this.conversationID });
+            await collection.deleteMany({ shoppingListID: this.shoppingListID });
         } finally {
             await this.client.close();
         }
@@ -79,7 +81,8 @@ export class CosmosDBService {
     /**
      * Updates the given parts of an item in the shopping list identified by its unique id.
      *
-     * Precondition: itemId and itemToUpdate must not be undefinied and itemId must not be an empty string.
+     * Precondition: itemId and itemToUpdate must not be undefined and itemId must not be an empty string.
+     * 
      * Postcondition: Updates the given members of the identified item.
      *      An error is thrown if the DB API call failed.
      * @param itemId unique id of the item to be updated.
@@ -92,7 +95,7 @@ export class CosmosDBService {
         }
         try {
             const collection = await this.connectAndGetCollection();
-            const filter: FilterQuery<any> = { 'conversationID': this.conversationID, '_id': new ObjectId(itemId) };
+            const filter: FilterQuery<any> = { 'shoppingListID': this.shoppingListID, '_id': new ObjectId(itemId) };
             const markedUpdate = itemToUpdate.marked === undefined ? undefined : { 'item.marked': itemToUpdate.marked };
             const unitUpdate = itemToUpdate.unit === undefined ? undefined : { 'item.unit': itemToUpdate.unit };
             const itemNameUpdate = itemToUpdate.itemName === undefined ? undefined : { 'item.itemName': itemToUpdate.itemName };
@@ -114,6 +117,7 @@ export class CosmosDBService {
      * Updates decreases the position in shopping list for all items of the same conversation which position is greater than the deleted one.
      *
      * Precondition: itemId must not be undefined or empty string.
+     * 
      * Postcondition: the item with given id is removed and the positions of the items with greater position are decreased by one.
      *      An error is thrown if the DB API call failed.
      * @param itemId the unique identifier of the item to be removed from the shopping list.
@@ -124,25 +128,25 @@ export class CosmosDBService {
         }
         try {
             const collection = await this.connectAndGetCollection();
-            const deletedItem: Item = (await collection.findOneAndDelete({ 'conversationID': this.conversationID, '_id': new ObjectId(itemId) })).value.item;
+            const deletedItem: Item = (await collection.findOneAndDelete({ 'shoppingListID': this.shoppingListID, '_id': new ObjectId(itemId) })).value.item;
             const positionOfDeletedItem = deletedItem.positionInShoppingList;
-            await collection.updateMany({ 'conversationID': this.conversationID, 'item.positionInShoppingList': { $gt: positionOfDeletedItem } }, { $inc: { 'item.positionInShoppingList': -1 } });
+            await collection.updateMany({ 'shoppingListID': this.shoppingListID, 'item.positionInShoppingList': { $gt: positionOfDeletedItem } }, { $inc: { 'item.positionInShoppingList': -1 } });
         } finally {
             await this.client.close();
         }
     }
 
     /**
-     * Retrieves all items of the {@link conversationID}'s shopping list.
+     * Retrieves all items of the {@link shoppingListID}'s shopping list.
      *
-     * Postcondition: all items in the {@link conversationID}'s shopping list are retrieved.
+     * Postcondition: all items in the {@link shoppingListID}'s shopping list are retrieved.
      *      An error is thrown if the DB API call failed.
-     * @returns all items in the {@link conversationID}'s shopping list.
+     * @returns all items in the {@link shoppingListID}'s shopping list.
      */
     public async getAllItems(): Promise<Item[]> {
         try {
             const collection = await this.connectAndGetCollection();
-            const findResult = await collection.find({ conversationID: this.conversationID }).toArray();
+            const findResult = await collection.find({ shoppingListID: this.shoppingListID }).toArray();
 
             const result = findResult.map(dbDocument => {
                 const item: Item = dbDocument.item;
