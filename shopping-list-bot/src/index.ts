@@ -20,6 +20,7 @@ import { ShoppingListRecognizer } from './dialogs/shoppingListRecognizer';
 import { ShoppingListAdaptiveCardResponseMiddleware } from './middleware/ShoppingListAdaptiveCardResponseMiddleware';
 import { FunctionService } from './services/functionsService';
 
+
 // Note: Ensure you have a .env file and include LuisAppId, LuisAPIKey, LuisAPIHostName and FunctionsBaseURL.
 const ENV_FILE = path.join(__dirname, '..', '.env');
 config({ path: ENV_FILE });
