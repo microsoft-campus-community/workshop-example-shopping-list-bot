@@ -137,6 +137,7 @@ export class MainDialog extends ComponentDialog {
         }
 
         // Call LUIS and gather any potential shopping list related input. (Note the TurnContext has the response to the prompt)
+        TurnContext.removeRecipientMention(stepContext.context.activity);
         const luisResult = await this.luisRecognizer.executeLuisQuery(stepContext.context);
         
         
